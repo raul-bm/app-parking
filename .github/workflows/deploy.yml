@@ -1,0 +1,74 @@
+name: Deploy to server
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create env files
+        run: |
+          mkdir -p deploy-env
+
+          cat > deploy-env/.env << 'ENVEOF'
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          ADMINER_PORT=${{ secrets.ADMINER_PORT }}
+          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          ENVEOF
+
+          cat > deploy-env/backend.env.docker << 'ENVEOF'
+          DATABASE_URL=postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@postgres:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}
+          PORT=${{ secrets.BACKEND_PORT }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          ENVEOF
+
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > deploy-env/frontend.env
+
+      - name: Copy env files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          source: "deploy-env/*"
+          target: "/tmp/app-parking-env"
+          strip_components: 1
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+
+            if [ ! -d "$HOME/app-parking" ]; then
+              git clone https://github.com/raul-bm/app-parking.git "$HOME/app-parking"
+            fi
+
+            cd "$HOME/app-parking"
+
+            git stash || true
+            git pull origin master
+
+            cp /tmp/app-parking-env/.env ./.env
+            cp /tmp/app-parking-env/backend.env.docker ./backend/.env.docker
+            cp /tmp/app-parking-env/frontend.env ./frontend/.env
+            rm -rf /tmp/app-parking-env
+
+            docker compose down
+            docker compose up --build -d
+
+            docker image prune -af

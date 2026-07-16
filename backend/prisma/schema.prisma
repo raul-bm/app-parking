@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+    id                  Int                 @id @default(autoincrement())
+    email               String              @unique
+    passwordHash        String
+    username            String              @unique
+    realName            String
+    createdAt           DateTime            @default(now())
+
+    pins                Pin[]
+    groupsOwned         Group[]             @relation("GroupOwner")
+    memberships         GroupMember[]
+    pinSharesReceived   PinShareUser[]
+
+    friendshipSent      Friendship[]        @relation("FriendshipRequester")
+    friendshipReceived  Friendship[]        @relation("FriendshipAddressee")
+}
+
+model Group {
+    id                  Int                 @id @default(autoincrement())
+    name                String
+    ownerId             Int
+    owner               User                @relation("GroupOwner", fields: [ownerId], references: [id])
+
+    members             GroupMember[]
+    pinShares           PinShareGroup[]
+}
+
+model Pin {
+    id                  Int                 @id @default(autoincrement())
+    lat                 Float
+    long                Float
+    note                String?
+    createdAt           DateTime            @default(now())
+
+    ownerId             Int
+    owner               User                @relation(fields: [ownerId], references: [id])
+
+    sharedWithUsers     PinShareUser[]
+    sharedWithGroups    PinShareGroup[]
+}
+
+model GroupMember {
+    groupId             Int
+    userId              Int
+    
+    group               Group               @relation(fields: [groupId], references: [id], onDelete: Cascade)
+    user                User                @relation(fields: [userId], references: [id])
+
+    @@id([groupId, userId])
+}
+
+model PinShareUser {
+    pinId               Int
+    userId              Int
+
+    pin                 Pin                 @relation(fields: [pinId], references: [id], onDelete: Cascade)
+    user                User                @relation(fields: [userId], references: [id])
+
+    @@id([pinId, userId])
+}
+
+model PinShareGroup {
+    pinId               Int
+    groupId             Int
+
+    pin                 Pin                 @relation(fields: [pinId], references: [id], onDelete: Cascade)
+    group               Group               @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+    @@id([pinId, groupId])
+}
+
+model Friendship {
+    id                  Int                 @id @default(autoincrement())
+    requesterId         Int
+    addresseeId         Int
+    status              FriendshipStatus    @default(PENDING)
+    createdAt           DateTime            @default(now())
+
+    requester           User                @relation("FriendshipRequester", fields: [requesterId], references: [id], onDelete: Cascade)
+    addressee           User                @relation("FriendshipAddressee", fields: [addresseeId], references: [id], onDelete: Cascade)
+
+    @@unique([requesterId, addresseeId])
+}
+
+enum FriendshipStatus {
+    PENDING
+    ACCEPTED
+}
