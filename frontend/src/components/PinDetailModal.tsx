@@ -1,3 +1,5 @@
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+
 interface PinDetailModalProps {
   pin: {
     id: number;
@@ -36,6 +38,19 @@ export default function PinDetailModal({
             X
           </button>
         </div>
+
+        <div className="w-full h-48 rounded-xl overflow-hidden mb-4 border border-gray-600">
+          <MapContainer
+            center={[pin.lat, pin.long]}
+            zoom={16}
+            className="h-full w-full"
+            scrollWheelZoom={true}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={[pin.lat, pin.long]} />
+          </MapContainer>
+        </div>
+
         <div className="space-y-3 text-gray-300">
           <div>
             <span className="text-gray-500 text-sm">Created by</span>

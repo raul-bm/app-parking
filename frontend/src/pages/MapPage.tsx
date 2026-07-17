@@ -7,7 +7,6 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import { useEffect, useState, useRef } from "react";
 import { api } from "../api/client";
 import PinDetailModal from "../components/PinDetailModal";
