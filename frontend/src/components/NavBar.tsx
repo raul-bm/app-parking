@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const navItems = [
   {
@@ -82,7 +83,7 @@ const navItems = [
     ),
   },
   {
-    label: "Pins shared with me",
+    label: "Pins shared",
     path: "/shared-with-me",
     icon: (
       <svg
@@ -106,6 +107,12 @@ const navItems = [
 export default function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
 
   return (
     <nav className="bg-gray-800 border-t border-gray-700">
@@ -123,6 +130,26 @@ export default function NavBar() {
             </button>
           );
         })}
+        <button
+          onClick={handleLogout}
+          className="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 text-gray-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
+            />
+          </svg>
+          <span className="text-[10px] font-medium">Logout</span>
+        </button>
       </div>
     </nav>
   );

@@ -34,6 +34,11 @@ export async function getPins(req: AuthRequest, res: Response) {
         },
       ],
     },
+    include: {
+      owner: {
+        select: { realName: true },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -71,6 +76,11 @@ export async function getSpecificPin(req: AuthRequest, res: Response) {
 
   const pin = await prisma.pin.findUnique({
     where: { id: pinId },
+    include: {
+      owner: {
+        select: { realName: true },
+      },
+    },
   });
 
   if (!pin) {
@@ -108,6 +118,11 @@ export async function getSharedWithMe(req: AuthRequest, res: Response) {
           },
         },
       ],
+    },
+    include: {
+      owner: {
+        select: { realName: true },
+      },
     },
     orderBy: { createdAt: "desc" },
   });
