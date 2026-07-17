@@ -3,6 +3,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MapPage from "./pages/MapPage";
+import AppLayout from "./components/AppLayout";
+import HistoryPage from "./pages/HistoryPage";
+import FriendsPage from "./pages/FriendsPage";
+import GroupsPage from "./pages/GroupsPage";
+import SharedWithMePage from "./pages/SharedWithMePage";
 
 export default function App() {
   return (
@@ -14,7 +19,49 @@ export default function App() {
           path="/map"
           element={
             <ProtectedRoute>
-              <MapPage />
+              <AppLayout>
+                <MapPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <HistoryPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/friends"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <FriendsPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/groups"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <GroupsPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/shared-with-me"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <SharedWithMePage />
+              </AppLayout>
             </ProtectedRoute>
           }
         />

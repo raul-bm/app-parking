@@ -13,7 +13,7 @@ export default function MapPage() {
   }
 
   return (
-    <div style={{ height: "100vh", width: "100%", position: "relative" }}>
+    <div style={{ height: "100%", width: "100%", position: "relative" }}>
       <button
         onClick={handleLogout}
         style={{
