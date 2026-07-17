@@ -8,9 +8,14 @@ interface PinDetailModalProps {
     owner: { realName: string } | null;
   } | null;
   onClose: () => void;
+  onDelete?: (pinId: number) => void;
 }
 
-export default function PinDetailModal({ pin, onClose }: PinDetailModalProps) {
+export default function PinDetailModal({
+  pin,
+  onClose,
+  onDelete,
+}: PinDetailModalProps) {
   if (!pin) return null;
 
   return (
@@ -58,6 +63,17 @@ export default function PinDetailModal({ pin, onClose }: PinDetailModalProps) {
               {new Date(pin.createdAt).toLocaleString()}
             </p>
           </div>
+          {onDelete && (
+            <button
+              onClick={() => {
+                onDelete(pin.id);
+                onClose();
+              }}
+              className="w-full mt-4 py-2 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-500 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+            >
+              Delete pin
+            </button>
+          )}
         </div>
       </div>
     </div>

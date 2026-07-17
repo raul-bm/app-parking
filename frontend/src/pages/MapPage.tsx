@@ -11,6 +11,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useState, useRef } from "react";
 import { api } from "../api/client";
 import PinDetailModal from "../components/PinDetailModal";
+import { useAuth } from "../context/AuthContext";
 
 const DefaultIcon = L.icon({
   iconRetinaUrl:
@@ -55,6 +56,7 @@ export default function MapPage() {
   >(null);
   const [note, setNote] = useState("");
   const [selectedPin, setSelectedPin] = useState<any>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -66,7 +68,7 @@ export default function MapPage() {
     api("/pins").then(setPins).catch(console.log);
   }, []);
 
-  const lastPin = pins.length > 0 ? pins[pins.length - 1] : null;
+  const lastPin = pins.length > 0 ? pins[0] : null;
 
   async function createPin(lat: number, long: number) {
     try {
@@ -78,6 +80,15 @@ export default function MapPage() {
       setClickedLocation(null);
       const updated = await api("/pins");
       setPins(updated);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleDeletePin(pinId: number) {
+    try {
+      await api(`/pins/${pinId}`, { method: "DELETE" });
+      setPins((prev) => prev.filter((p) => p.id !== pinId));
     } catch (err) {
       console.error(err);
     }
@@ -155,40 +166,50 @@ export default function MapPage() {
         </div>
       </div>
 
-      <div className="px-4 pb-2" ref={controlsRef}>
-        <input
-          type="text"
-          placeholder="Add a note (e.g. parking spot number)"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          className="w-full p-3 rounded-xl bg-gray-800 text-white border border-gray-700 placeholder-gray-500 outline-none focus:ring-2 focus:ring-purple-500"
-        />
-      </div>
+      <div ref={controlsRef}>
+        <div className="px-4 pb-2">
+          <input
+            type="text"
+            placeholder="Add a note (e.g. parking spot number)"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className="w-full p-3 rounded-xl bg-gray-800 text-white border border-gray-700 placeholder-gray-500 outline-none focus:ring-2 focus:ring-purple-500"
+          />
+        </div>
 
-      <div className="px-4 pb-4">
-        {clickedLocation && (
-          <button
-            onClick={() => createPin(clickedLocation[0], clickedLocation[1])}
-            className="w-full mb-2 py-4 flex-1 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold
+        <div className="px-4 pb-4">
+          {clickedLocation && (
+            <button
+              onClick={() => createPin(clickedLocation[0], clickedLocation[1])}
+              className="w-full mb-2 py-4 flex-1 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold
               shadow-lg hover:from-emerald-500 hover:to-teal-500 active:scale-[0.98] transition-all duration-200 cursor-
               pointer"
-          >
-            Park at selected point
-          </button>
-        )}
-        <button
-          onClick={() =>
-            userLocation && createPin(userLocation[0], userLocation[1])
-          }
-          disabled={!userLocation}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-
+            >
+              Park at selected point
+            </button>
+          )}
+          <button
+            onClick={() =>
+              userLocation && createPin(userLocation[0], userLocation[1])
+            }
+            disabled={!userLocation}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-
             lg shadow-lg disabled:opacity-40 disabled:cursor-not-allowed hover:from-purple-500 hover:to-indigo-500
             active:scale-[0.98] transition-all duration-200 cursor-pointer"
-        >
-          Park in your location
-        </button>
+          >
+            Park in your location
+          </button>
+        </div>
       </div>
-      <PinDetailModal pin={selectedPin} onClose={() => setSelectedPin(null)} />
+      <PinDetailModal
+        pin={selectedPin}
+        onClose={() => setSelectedPin(null)}
+        onDelete={
+          selectedPin && user?.id === selectedPin.ownerId
+            ? handleDeletePin
+            : undefined
+        }
+      />
     </div>
   );
 }
