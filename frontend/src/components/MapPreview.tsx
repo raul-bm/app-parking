@@ -18,6 +18,7 @@ export default function MapPreview({
         doubleClickZoom={false}
         touchZoom={false}
         className="h-full w-full"
+        attributionControl={false}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Marker position={[lat, long]} />

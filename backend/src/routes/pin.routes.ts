@@ -5,6 +5,7 @@ import {
   deletePin,
   getSpecificPin,
   getSharedWithMe,
+  updatePin,
 } from "../controllers/pin.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 import {
@@ -22,6 +23,7 @@ router.get("/", authMiddleware, getPins);
 router.get("/shared-with-me", authMiddleware, getSharedWithMe);
 router.delete("/:id", authMiddleware, deletePin);
 router.get("/:id", authMiddleware, getSpecificPin);
+router.patch("/:id", authMiddleware, updatePin);
 
 // Endpoints for share
 router.post("/:id/share/user", authMiddleware, sharePinWithUser);

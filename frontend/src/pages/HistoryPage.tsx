@@ -65,6 +65,9 @@ export default function HistoryPage() {
         onDelete={
           user?.id === selectedPin?.ownerId ? handleDeletePin : undefined
         }
+        onUpdate={(pinId, updatedPin) => {
+          setPins((prev) => prev.map((p) => (p.id === pinId ? updatedPin : p)));
+        }}
       />
     </div>
   );

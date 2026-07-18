@@ -129,3 +129,30 @@ export async function getSharedWithMe(req: AuthRequest, res: Response) {
 
   res.json(pins);
 }
+
+export async function updatePin(req: AuthRequest, res: Response) {
+  if (!ensureAuthenticated(req, res)) return;
+
+  const pinId = Number(req.params.id);
+  const { note } = req.body ?? {};
+
+  const pin = await prisma.pin.findUnique({
+    where: { id: pinId },
+  });
+
+  if (!pin) {
+    return res.status(404).json({ error: "Pin not found" });
+  }
+
+  if (pin.ownerId !== req.userId) {
+    return res.status(403).json({ error: "Not authorized to update this pin" });
+  }
+
+  const updated = await prisma.pin.update({
+    where: { id: pinId },
+    data: { note },
+    include: { owner: { select: { realName: true } } },
+  });
+
+  res.json(updated);
+}

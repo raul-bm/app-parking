@@ -123,6 +123,7 @@ export default function MapPage() {
               center={userLocation}
               zoom={15}
               className="h-full w-full"
+              attributionControl={false}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <FlyToCenter center={userLocation} />
@@ -208,6 +209,9 @@ export default function MapPage() {
             ? handleDeletePin
             : undefined
         }
+        onUpdate={(pinId, updatedPin) => {
+          setPins((prev) => prev.map((p) => (p.id === pinId ? updatedPin : p)));
+        }}
       />
     </div>
   );

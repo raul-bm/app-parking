@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useState, useRef, useEffect } from "react";
 
 const navItems = [
   {
@@ -109,10 +110,41 @@ export default function NavBar() {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
+  const [optionsMenu, setOptionsMenu] = useState<"closed" | "open" | "closing">(
+    "closed",
+  );
+  const optionsRef = useRef<HTMLDivElement>(null);
+
   function handleLogout() {
     logout();
     navigate("/login");
   }
+
+  function openOptions() {
+    setOptionsMenu("open");
+  }
+
+  function closeOptions() {
+    setOptionsMenu("closing");
+    setTimeout(() => {
+      setOptionsMenu("closed");
+    }, 150);
+  }
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(e.target as Node) &&
+        optionsMenu === "open"
+      ) {
+        closeOptions();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [optionsMenu]);
 
   return (
     <nav className="bg-gray-800 border-t border-gray-700">
@@ -130,26 +162,67 @@ export default function NavBar() {
             </button>
           );
         })}
-        <button
-          onClick={handleLogout}
-          className="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 text-gray-600"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="size-6"
+        <div ref={optionsRef} className="relative">
+          <button
+            onClick={() => {
+              if (optionsMenu === "open" || optionsMenu === "closing") {
+                closeOptions();
+              } else {
+                openOptions();
+              }
+            }}
+            className="flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 text-gray-500 hover:text-gray-300"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
-            />
-          </svg>
-          <span className="text-[10px] font-medium">Logout</span>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21.75 6.75a4.5 4.5 0 0 1-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 1 1-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 0 1 6.336-4.486l-3.276 3.276a3.004 3.004 0 0 0 2.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852Z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.867 19.125h.008v.008h-.008v-.008Z"
+              />
+            </svg>
+            <span className="text-[10px] font-medium">Options</span>
+          </button>
+
+          {optionsMenu !== "closed" && (
+            <div
+              className={`absolute bottom-full right-0 mb-2 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-xl shadow-black/40 overflow-hidden ${optionsMenu === "open" ? "animate-slide-up" : "animate-slide-down"}`}
+            >
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-red-400
+          transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
+                  />
+                </svg>
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
