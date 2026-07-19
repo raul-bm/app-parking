@@ -35,6 +35,11 @@ export async function sendFriendRequest(req: AuthRequest, res: Response) {
 
   const friendship = await prisma.friendship.create({
     data: { requesterId: req.userId, addresseeId: targetUserId },
+    include: {
+      addressee: {
+        select: { username: true },
+      },
+    },
   });
 
   return res.status(201).json(friendship);
@@ -114,10 +119,10 @@ export async function listFriends(req: AuthRequest, res: Response) {
     },
     include: {
       requester: {
-        select: { id: true, username: true, realName: true, email: true },
+        select: { id: true, username: true, realName: true },
       },
       addressee: {
-        select: { id: true, username: true, realName: true, email: true },
+        select: { id: true, username: true, realName: true },
       },
     },
   });
@@ -125,9 +130,10 @@ export async function listFriends(req: AuthRequest, res: Response) {
   const friends = friendships.map((f) => {
     const friend = f.requesterId === req.userId ? f.addressee : f.requester;
     return {
+      friendshipId: f.id,
       username: friend.username,
       realName: friend.realName,
-      email: friend.email,
+      friendsSince: f.createdAt,
     };
   });
 
@@ -177,4 +183,22 @@ export async function removeFriend(req: AuthRequest, res: Response) {
   await prisma.friendship.delete({ where: { id: friendshipId } });
 
   res.status(204).send();
+}
+
+export async function listSentRequests(req: AuthRequest, res: Response) {
+  if (!ensureAuthenticated(req, res)) return;
+
+  const sentRequests = await prisma.friendship.findMany({
+    where: {
+      requesterId: req.userId,
+      status: "PENDING",
+    },
+    include: {
+      addressee: {
+        select: { id: true, username: true, realName: true },
+      },
+    },
+  });
+
+  res.json(sentRequests);
 }

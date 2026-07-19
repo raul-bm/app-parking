@@ -4,6 +4,7 @@ import {
   acceptFriendRequest,
   listFriends,
   listPendingRequests,
+  listSentRequests,
   rejectFriendRequest,
   removeFriend,
   sendFriendRequest,
@@ -17,6 +18,7 @@ router.patch("/:id/accept", authMiddleware, acceptFriendRequest);
 router.patch("/:id/reject", authMiddleware, rejectFriendRequest);
 router.get("/", authMiddleware, listFriends);
 router.get("/pending", authMiddleware, listPendingRequests);
+router.get("/sent", authMiddleware, listSentRequests);
 router.delete("/:id", authMiddleware, removeFriend);
 
 export default router;
