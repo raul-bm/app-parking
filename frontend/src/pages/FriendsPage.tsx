@@ -6,11 +6,11 @@ import AddFriendModal from "../components/AddFriendModal";
 export default function FriendsPage() {
   const { user } = useAuth();
   const [friends, setFriends] = useState<any[]>([]);
-  const [sentRequests, setSentRequests] = useState<any[]>([]);
-  const [receivedRequests, setReceivedRequests] = useState<any[]>([]);
+  //const [sentRequests, setSentRequests] = useState<any[]>([]);
+  //const [receivedRequests, setReceivedRequests] = useState<any[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [showSentModal, setShowSentModal] = useState(false);
-  const [showReceivedModal, setShowReceivedModal] = useState(false);
+  //const [showSentModal, setShowSentModal] = useState(false);
+  //const [showReceivedModal, setShowReceivedModal] = useState(false);
 
   useEffect(() => {
     loadAll();
@@ -18,14 +18,15 @@ export default function FriendsPage() {
 
   async function loadAll() {
     try {
-      const [friendsData, sentData, receivedData] = await Promise.all([
+      /*const [friendsData, sentData, receivedData] = await Promise.all([
         api("/friendships"),
         api("/friendships/sent"),
         api("/friendships/pending"),
-      ]);
+      ]);*/
+      const [friendsData] = await Promise.all([api("/friendships")]);
       setFriends(friendsData);
-      setSentRequests(sentData);
-      setReceivedRequests(receivedData);
+      //setSentRequests(sentData);
+      //setReceivedRequests(receivedData);
     } catch (err) {
       console.error(err);
     }
@@ -42,6 +43,7 @@ export default function FriendsPage() {
       >
         Add friend
       </button>
+      {/*
       <div className="flex gap-3 mt-3">
         <button
           onClick={() => setShowSentModal(true)}
@@ -57,7 +59,7 @@ export default function FriendsPage() {
           {receivedRequests.length > 0 ? `(${receivedRequests.length})` : ""}
         </button>
       </div>
-
+      */}
       <div className="flex-1 overflow-y-auto mt-4 space-y-2">
         {friends.length === 0 ? (
           <p className="text-gray-500 text-center mt-10">No friends yet</p>
