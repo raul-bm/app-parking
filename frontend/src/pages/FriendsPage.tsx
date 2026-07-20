@@ -4,6 +4,12 @@ import { api } from "../api/client";
 import AddFriendModal from "../components/AddFriendModal";
 import SentRequestsModal from "../components/SentRequestsModal";
 import ReceivedRequestsModal from "../components/ReceivedRequestsModal";
+import {
+  connectSocket,
+  disconnectSocket,
+  onFriendshipUpdated,
+  offFriendshipUpdated,
+} from "../services/socket";
 
 export default function FriendsPage() {
   const { user } = useAuth();
@@ -16,18 +22,29 @@ export default function FriendsPage() {
 
   useEffect(() => {
     loadAll();
+
+    const token = localStorage.getItem("token");
+    if (user && token) {
+      connectSocket(token);
+      onFriendshipUpdated(loadAll);
+    }
+
+    return () => {
+      offFriendshipUpdated(loadAll);
+      disconnectSocket();
+    };
   }, [user]);
 
   async function loadAll() {
     try {
       const [friendsData, sentData, receivedData] = await Promise.all([
-        api("/friendships"),
-        api("/friendships/sent"),
-        api("/friendships/pending"),
+        api("/friendships").catch(() => null),
+        api("/friendships/sent").catch(() => null),
+        api("/friendships/pending").catch(() => null),
       ]);
-      setFriends(friendsData);
-      setSentRequests(sentData);
-      setReceivedRequests(receivedData);
+      if (friendsData !== null) setFriends(friendsData);
+      if (sentData !== null) setSentRequests(sentData);
+      if (receivedData !== null) setReceivedRequests(receivedData);
     } catch (err) {
       console.error(err);
     }

@@ -2,6 +2,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { Response } from "express";
 import { prisma } from "../lib/prisma";
 import { ensureAuthenticated } from "../utils/authUtils";
+import { notifyUser } from "../lib/socket";
 
 export async function sendFriendRequest(req: AuthRequest, res: Response) {
   if (!ensureAuthenticated(req, res)) return;
@@ -42,6 +43,8 @@ export async function sendFriendRequest(req: AuthRequest, res: Response) {
     },
   });
 
+  notifyUser(targetUserId, "friendship:updated");
+
   return res.status(201).json(friendship);
 }
 
@@ -73,6 +76,8 @@ export async function acceptFriendRequest(req: AuthRequest, res: Response) {
     data: { status: "ACCEPTED" },
   });
 
+  notifyUser(friendship.requesterId, "friendship:updated");
+
   res.json(updated);
 }
 
@@ -102,9 +107,16 @@ export async function rejectFriendRequest(req: AuthRequest, res: Response) {
       .json({ error: "Not authorized to delete this friendship" });
   }
 
+  const otherUserId =
+    friendship.requesterId === req.userId
+      ? friendship.addresseeId
+      : friendship.requesterId;
+
   await prisma.friendship.delete({
     where: { id: friendshipId },
   });
+
+  notifyUser(otherUserId, "friendship:updated");
 
   res.status(204).send();
 }
@@ -180,7 +192,14 @@ export async function removeFriend(req: AuthRequest, res: Response) {
       .json({ error: "Not authorized to remove this friendship" });
   }
 
+  const otherUserId =
+    friendship.requesterId === req.userId
+      ? friendship.addresseeId
+      : friendship.requesterId;
+
   await prisma.friendship.delete({ where: { id: friendshipId } });
+
+  notifyUser(otherUserId, "friendship:updated");
 
   res.status(204).send();
 }

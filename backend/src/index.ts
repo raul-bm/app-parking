@@ -1,11 +1,13 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import http from "http";
 import authRoutes from "./routes/auth.routes";
 import pinRoutes from "./routes/pin.routes";
 import friendshipRoutes from "./routes/friendship.routes";
 import groupRoutes from "./routes/group.routes";
 import userRoutes from "./routes/user.routes";
+import { setupSocket } from "./lib/socket";
 
 const app = express();
 
@@ -34,6 +36,9 @@ app.get("/health", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http:localhost:${PORT}`);
+const server = http.createServer(app);
+setupSocket(server);
+
+server.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
