@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../api/client";
 import AddFriendModal from "../components/AddFriendModal";
+import SentRequestsModal from "../components/SentRequestsModal";
+import ReceivedRequestsModal from "../components/ReceivedRequestsModal";
 
 export default function FriendsPage() {
   const { user } = useAuth();
   const [friends, setFriends] = useState<any[]>([]);
-  //const [sentRequests, setSentRequests] = useState<any[]>([]);
-  //const [receivedRequests, setReceivedRequests] = useState<any[]>([]);
+  const [sentRequests, setSentRequests] = useState<any[]>([]);
+  const [receivedRequests, setReceivedRequests] = useState<any[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
-  //const [showSentModal, setShowSentModal] = useState(false);
-  //const [showReceivedModal, setShowReceivedModal] = useState(false);
+  const [showSentModal, setShowSentModal] = useState(false);
+  const [showReceivedModal, setShowReceivedModal] = useState(false);
 
   useEffect(() => {
     loadAll();
@@ -18,15 +20,14 @@ export default function FriendsPage() {
 
   async function loadAll() {
     try {
-      /*const [friendsData, sentData, receivedData] = await Promise.all([
+      const [friendsData, sentData, receivedData] = await Promise.all([
         api("/friendships"),
         api("/friendships/sent"),
         api("/friendships/pending"),
-      ]);*/
-      const [friendsData] = await Promise.all([api("/friendships")]);
+      ]);
       setFriends(friendsData);
-      //setSentRequests(sentData);
-      //setReceivedRequests(receivedData);
+      setSentRequests(sentData);
+      setReceivedRequests(receivedData);
     } catch (err) {
       console.error(err);
     }
@@ -43,7 +44,6 @@ export default function FriendsPage() {
       >
         Add friend
       </button>
-      {/*
       <div className="flex gap-3 mt-3">
         <button
           onClick={() => setShowSentModal(true)}
@@ -59,7 +59,7 @@ export default function FriendsPage() {
           {receivedRequests.length > 0 ? `(${receivedRequests.length})` : ""}
         </button>
       </div>
-      */}
+
       <div className="flex-1 overflow-y-auto mt-4 space-y-2">
         {friends.length === 0 ? (
           <p className="text-gray-500 text-center mt-10">No friends yet</p>
@@ -70,7 +70,7 @@ export default function FriendsPage() {
               className="flex items-center justify-between bg-gray-800 rounded-xl px-4 py-3"
             >
               <div>
-                <p className="text-white font-medium">{friend.username}</p>
+                <p className="text-white font-medium">@{friend.username}</p>
                 <p className="text-gray-400 text-sm">{friend.realName}</p>
               </div>
               <button
@@ -80,10 +80,10 @@ export default function FriendsPage() {
                   });
                   loadAll();
                 }}
-                className="text-gray-500 hover:text-red-400 transition-colors cursor-pointer"
+                className="py-1 px-2 rounded-xl bg-red-700 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                 title="Remove friend"
               >
-                X
+                Remove friend
               </button>
             </div>
           ))
@@ -98,26 +98,24 @@ export default function FriendsPage() {
           }}
         />
       )}
-      {/*
       {showSentModal && (
         <SentRequestsModal
           requests={sentRequests}
           onClose={() => setShowSentModal(false)}
-          onFriendAdded={() => {
+          onUpdated={() => {
             loadAll();
           }}
         />
       )}
-      {showSentModal && (
+      {showReceivedModal && (
         <ReceivedRequestsModal
           requests={receivedRequests}
           onClose={() => setShowReceivedModal(false)}
-          onFriendAdded={() => {
+          onUpdated={() => {
             loadAll();
           }}
         />
       )}
-      */}
     </div>
   );
 }

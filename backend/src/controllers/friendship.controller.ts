@@ -150,7 +150,7 @@ export async function listPendingRequests(req: AuthRequest, res: Response) {
     },
     include: {
       requester: {
-        select: { id: true, username: true, realName: true, email: true },
+        select: { id: true, username: true, realName: true },
       },
     },
   });
