@@ -19,7 +19,6 @@ export async function searchUser(req: AuthRequest, res: Response) {
     select: {
       id: true,
       username: true,
-      realName: true,
     },
   });
 

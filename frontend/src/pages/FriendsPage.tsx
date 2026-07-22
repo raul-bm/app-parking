@@ -10,6 +10,7 @@ import {
   onFriendshipUpdated,
   offFriendshipUpdated,
 } from "../services/socket";
+import ModalWrapper from "../components/ModalWrapper";
 
 export default function FriendsPage() {
   const { user } = useAuth();
@@ -107,15 +108,18 @@ export default function FriendsPage() {
         )}
       </div>
 
-      {showAddModal && (
+      <ModalWrapper show={showAddModal} onClose={() => setShowAddModal(false)}>
         <AddFriendModal
           onClose={() => setShowAddModal(false)}
           onFriendAdded={() => {
             loadAll();
           }}
         />
-      )}
-      {showSentModal && (
+      </ModalWrapper>
+      <ModalWrapper
+        show={showSentModal}
+        onClose={() => setShowSentModal(false)}
+      >
         <SentRequestsModal
           requests={sentRequests}
           onClose={() => setShowSentModal(false)}
@@ -123,8 +127,11 @@ export default function FriendsPage() {
             loadAll();
           }}
         />
-      )}
-      {showReceivedModal && (
+      </ModalWrapper>
+      <ModalWrapper
+        show={showReceivedModal}
+        onClose={() => setShowReceivedModal(false)}
+      >
         <ReceivedRequestsModal
           requests={receivedRequests}
           onClose={() => setShowReceivedModal(false)}
@@ -132,7 +139,7 @@ export default function FriendsPage() {
             loadAll();
           }}
         />
-      )}
+      </ModalWrapper>
     </div>
   );
 }

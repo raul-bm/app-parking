@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { api } from "../api/client";
 import MapPreview from "../components/MapPreview";
 import PinDetailModal from "../components/PinDetailModal";
+import ModalWrapper from "../components/ModalWrapper";
 
 export default function HistoryPage() {
   const { user } = useAuth();
@@ -59,16 +60,23 @@ export default function HistoryPage() {
         </div>
       )}
 
-      <PinDetailModal
-        pin={selectedPin}
+      <ModalWrapper
+        show={selectedPin !== null}
         onClose={() => setSelectedPin(null)}
-        onDelete={
-          user?.id === selectedPin?.ownerId ? handleDeletePin : undefined
-        }
-        onUpdate={(pinId, updatedPin) => {
-          setPins((prev) => prev.map((p) => (p.id === pinId ? updatedPin : p)));
-        }}
-      />
+      >
+        <PinDetailModal
+          pin={selectedPin}
+          onClose={() => setSelectedPin(null)}
+          onDelete={
+            user?.id === selectedPin?.ownerId ? handleDeletePin : undefined
+          }
+          onUpdate={(pinId, updatedPin) => {
+            setPins((prev) =>
+              prev.map((p) => (p.id === pinId ? updatedPin : p)),
+            );
+          }}
+        />
+      </ModalWrapper>
     </div>
   );
 }

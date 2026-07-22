@@ -22,3 +22,11 @@ export function onFriendshipUpdated(callback: () => void) {
 export function offFriendshipUpdated(callback: () => void) {
   socket?.off("friendship:updated", callback);
 }
+
+export function onGroupsUpdated(callback: () => void) {
+  socket?.on("groups:updated", callback);
+}
+
+export function offGroupsUpdated(callback: () => void) {
+  socket?.off("groups:updated", callback);
+}

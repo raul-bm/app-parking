@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from "react";
 import { api } from "../api/client";
 import PinDetailModal from "../components/PinDetailModal";
 import { useAuth } from "../context/AuthContext";
+import ModalWrapper from "../components/ModalWrapper";
 
 const DefaultIcon = L.icon({
   iconRetinaUrl:
@@ -201,18 +202,25 @@ export default function MapPage() {
           </button>
         </div>
       </div>
-      <PinDetailModal
-        pin={selectedPin}
+      <ModalWrapper
+        show={selectedPin !== null}
         onClose={() => setSelectedPin(null)}
-        onDelete={
-          selectedPin && user?.id === selectedPin.ownerId
-            ? handleDeletePin
-            : undefined
-        }
-        onUpdate={(pinId, updatedPin) => {
-          setPins((prev) => prev.map((p) => (p.id === pinId ? updatedPin : p)));
-        }}
-      />
+      >
+        <PinDetailModal
+          pin={selectedPin}
+          onClose={() => setSelectedPin(null)}
+          onDelete={
+            selectedPin && user?.id === selectedPin.ownerId
+              ? handleDeletePin
+              : undefined
+          }
+          onUpdate={(pinId, updatedPin) => {
+            setPins((prev) =>
+              prev.map((p) => (p.id === pinId ? updatedPin : p)),
+            );
+          }}
+        />
+      </ModalWrapper>
     </div>
   );
 }

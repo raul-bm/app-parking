@@ -2,6 +2,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { Response } from "express";
 import { prisma } from "../lib/prisma";
 import { ensureAuthenticated } from "../utils/authUtils";
+import { notifyUser } from "../lib/socket";
 
 export async function createGroup(req: AuthRequest, res: Response) {
   if (!ensureAuthenticated(req, res)) return;
@@ -86,6 +87,7 @@ export async function deleteGroup(req: AuthRequest, res: Response) {
 
   const group = await prisma.group.findUnique({
     where: { id: groupId },
+    include: { members: true },
   });
 
   if (!group) {
@@ -98,9 +100,15 @@ export async function deleteGroup(req: AuthRequest, res: Response) {
       .json({ error: "Not authorized to delete the group" });
   }
 
+  const membersIds = group.members.map((m) => m.userId);
+
   await prisma.group.delete({
     where: { id: groupId },
   });
+
+  for (const userId of membersIds) {
+    notifyUser(userId, "groups:updated");
+  }
 
   res.status(204).send();
 }
@@ -165,6 +173,9 @@ export async function addGroupMember(req: AuthRequest, res: Response) {
       user: { select: { id: true, username: true, realName: true } },
     },
   });
+
+  notifyUser(userId, "groups:updated");
+  notifyGroupMembers(groupId, "groups:updated", userId);
 
   res.status(201).json(newMember);
 }
@@ -233,5 +244,26 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
     },
   });
 
+  notifyUser(userIdToRemove, "groups:updated");
+  notifyGroupMembers(groupId, "groups:updated", userIdToRemove);
+
   return res.status(204).send();
+}
+
+async function notifyGroupMembers(
+  groupId: number,
+  event: string,
+  excludedUserId?: number,
+) {
+  const group = await prisma.group.findUnique({
+    where: { id: groupId },
+    include: { members: true },
+  });
+  if (!group) return;
+
+  for (const member of group.members) {
+    if (member.userId !== excludedUserId) {
+      notifyUser(member.userId, event);
+    }
+  }
 }
