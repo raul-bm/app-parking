@@ -21,7 +21,6 @@ export default function GroupDetailModal({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loadingAdd, setLoadingAdd] = useState(false);
-  const [removingId, setRemovingId] = useState(null);
 
   async function handleAddMember() {
     if (searchUserAdd === "") return;
