@@ -48,13 +48,14 @@ export default function SharedWithMePage() {
   async function loadSharedPins() {
     try {
       const data = await api("/pins/shared-with-me");
-      setPins(data || []);
 
       const sorted = (data || []).sort((a: any, b: any) => {
         const dateA = getLatestShareDate(a);
         const dateB = getLatestShareDate(b);
         return new Date(dateB).getTime() - new Date(dateA).getTime();
       });
+
+      setPins(sorted || []);
 
       setSelectedPin((current: any) => {
         if (!current) return current;
