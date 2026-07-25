@@ -143,6 +143,7 @@ export async function listFriends(req: AuthRequest, res: Response) {
     const friend = f.requesterId === req.userId ? f.addressee : f.requester;
     return {
       friendshipId: f.id,
+      id: friend.id,
       username: friend.username,
       realName: friend.realName,
       friendsSince: f.createdAt,
@@ -198,6 +199,20 @@ export async function removeFriend(req: AuthRequest, res: Response) {
       : friendship.requesterId;
 
   await prisma.friendship.delete({ where: { id: friendshipId } });
+
+  await prisma.pinShareUser.deleteMany({
+    where: {
+      userId: otherUserId,
+      pin: { ownerId: req.userId },
+    },
+  });
+
+  await prisma.pinShareUser.deleteMany({
+    where: {
+      userId: req.userId,
+      pin: { ownerId: otherUserId },
+    },
+  });
 
   notifyUser(otherUserId, "friendship:updated");
 

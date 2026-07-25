@@ -30,7 +30,7 @@ export default function ModalWrapper({
 
   return (
     <div
-      className={`fixed inset-0 z-9999 flex items-center justify-center transition-all duration-200 ${visible ? "bg-black/50" : "bg-black/0"}`}
+      className={`fixed inset-0 z-9999 flex items-center justify-center transition-all duration-200 ${visible ? "bg-black/60" : "bg-black/0"}`}
       onClick={() => {
         if (visible) {
           setVisible(false);

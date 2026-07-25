@@ -222,6 +222,13 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
       },
     });
 
+    await prisma.pinShareGroup.deleteMany({
+      where: {
+        groupId: groupId,
+        pin: { ownerId: userIdToRemove },
+      },
+    });
+
     return res.status(204).send();
   }
 
@@ -241,6 +248,13 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
   await prisma.groupMember.delete({
     where: {
       groupId_userId: { groupId, userId: userIdToRemove },
+    },
+  });
+
+  await prisma.pinShareGroup.deleteMany({
+    where: {
+      groupId: groupId,
+      pin: { ownerId: userIdToRemove },
     },
   });
 

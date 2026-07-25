@@ -4,6 +4,7 @@ import { api } from "../api/client";
 import MapPreview from "../components/MapPreview";
 import PinDetailModal from "../components/PinDetailModal";
 import ModalWrapper from "../components/ModalWrapper";
+import { formatDate } from "../utils/formatDate";
 
 export default function HistoryPage() {
   const { user } = useAuth();
@@ -47,10 +48,12 @@ export default function HistoryPage() {
             >
               <div className="flex-1 min-w-0">
                 <p className="text-gray-400 text-xs">
-                  {new Date(pin.createdAt).toLocaleString()}
+                  {formatDate(pin.createdAt)}
                 </p>
                 <p className="text-white mt-1 truncate">
-                  {pin.note || "No notes"}
+                  {pin.note || (
+                    <span className="text-gray-500 italic">No notes</span>
+                  )}
                 </p>
               </div>
 

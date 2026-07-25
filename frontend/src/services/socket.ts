@@ -30,3 +30,11 @@ export function onGroupsUpdated(callback: () => void) {
 export function offGroupsUpdated(callback: () => void) {
   socket?.off("groups:updated", callback);
 }
+
+export function onPinsChanged(callback: () => void) {
+  socket?.on("pins:changed", callback);
+}
+
+export function offPinsChanged(callback: () => void) {
+  socket?.off("pins:changed", callback);
+}

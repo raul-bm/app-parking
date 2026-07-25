@@ -2,6 +2,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { Response } from "express";
 import { prisma } from "../lib/prisma";
 import { ensureAuthenticated } from "../utils/authUtils";
+import { notifyUser } from "../lib/socket";
 
 export async function createPin(req: AuthRequest, res: Response) {
   if (!ensureAuthenticated(req, res)) return;
@@ -50,21 +51,37 @@ export async function deletePin(req: AuthRequest, res: Response) {
 
   const pinId = Number(req.params.id);
 
-  const pin = await prisma.pin.findUnique({
+  const pinWithShares = await prisma.pin.findUnique({
     where: { id: pinId },
+    include: {
+      sharedWithUsers: { select: { userId: true } },
+      sharedWithGroups: {
+        include: {
+          group: { include: { members: { select: { userId: true } } } },
+        },
+      },
+    },
   });
 
-  if (!pin) {
+  if (!pinWithShares) {
     return res.status(404).json({ error: "Pin not found" });
   }
 
-  if (pin.ownerId !== req.userId) {
+  if (pinWithShares.ownerId !== req.userId) {
     return res.status(403).json({ error: "Not authorized to delete this pin" });
   }
 
-  await prisma.pin.delete({
-    where: { id: pinId },
-  });
+  const notifiedUsers = new Set<number>();
+  for (const s of pinWithShares.sharedWithUsers) notifiedUsers.add(s.userId);
+  for (const gs of pinWithShares.sharedWithGroups) {
+    for (const m of gs.group.members) notifiedUsers.add(m.userId);
+  }
+
+  await prisma.pin.delete({ where: { id: pinId } });
+
+  for (const userId of notifiedUsers) {
+    notifyUser(userId, "pins:changed");
+  }
 
   res.status(204).send();
 }
@@ -79,6 +96,14 @@ export async function getSpecificPin(req: AuthRequest, res: Response) {
     include: {
       owner: {
         select: { realName: true },
+      },
+      sharedWithUsers: {
+        include: {
+          user: { select: { id: true, username: true, realName: true } },
+        },
+      },
+      sharedWithGroups: {
+        include: { group: { select: { id: true, name: true } } },
       },
     },
   });
@@ -110,6 +135,7 @@ export async function getSharedWithMe(req: AuthRequest, res: Response) {
 
   const pins = await prisma.pin.findMany({
     where: {
+      ownerId: { not: req.userId },
       OR: [
         { sharedWithUsers: { some: { userId: req.userId } } },
         {
@@ -123,8 +149,17 @@ export async function getSharedWithMe(req: AuthRequest, res: Response) {
       owner: {
         select: { realName: true },
       },
+      sharedWithUsers: {
+        where: { userId: req.userId },
+        select: { userId: true, createdAt: true },
+      },
+      sharedWithGroups: {
+        select: {
+          createdAt: true,
+          group: { select: { id: true, name: true } },
+        },
+      },
     },
-    orderBy: { createdAt: "desc" },
   });
 
   res.json(pins);
@@ -153,6 +188,29 @@ export async function updatePin(req: AuthRequest, res: Response) {
     data: { note },
     include: { owner: { select: { realName: true } } },
   });
+
+  const shares = await prisma.pin.findUnique({
+    where: { id: pinId },
+    include: {
+      sharedWithUsers: { select: { userId: true } },
+      sharedWithGroups: {
+        include: {
+          group: { include: { members: { select: { userId: true } } } },
+        },
+      },
+    },
+  });
+
+  if (shares) {
+    const notifiedUsers = new Set<number>();
+    for (const s of shares.sharedWithUsers) notifiedUsers.add(s.userId);
+    for (const gs of shares.sharedWithGroups) {
+      for (const m of gs.group.members) notifiedUsers.add(m.userId);
+    }
+    for (const userId of notifiedUsers) {
+      notifyUser(userId, "pins:changed");
+    }
+  }
 
   res.json(updated);
 }

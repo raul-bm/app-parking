@@ -2,6 +2,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { Response } from "express";
 import { prisma } from "../lib/prisma";
 import { ensureAuthenticated } from "../utils/authUtils";
+import { notifyUser } from "../lib/socket";
 
 export async function sharePinWithUser(req: AuthRequest, res: Response) {
   if (!ensureAuthenticated(req, res)) return;
@@ -49,6 +50,8 @@ export async function sharePinWithUser(req: AuthRequest, res: Response) {
   const newShareWithUser = await prisma.pinShareUser.create({
     data: { pinId: pinId, userId: userId },
   });
+
+  notifyUser(userId, "pins:changed");
 
   res.status(201).json(newShareWithUser);
 }
@@ -107,6 +110,12 @@ export async function sharePinWithGroup(req: AuthRequest, res: Response) {
     data: { pinId: pinId, groupId: groupId },
   });
 
+  for (const member of group.members) {
+    if (member.userId !== req.userId) {
+      notifyUser(member.userId, "pins:changed");
+    }
+  }
+
   res.status(201).json(newShareWithGroup);
 }
 
@@ -159,6 +168,8 @@ export async function unsharePinWithUser(req: AuthRequest, res: Response) {
     },
   });
 
+  notifyUser(userToUnshareId, "pins:changed");
+
   res.status(204).send();
 }
 
@@ -206,6 +217,17 @@ export async function unsharePinWithGroup(req: AuthRequest, res: Response) {
       pinId_groupId: { pinId: pinId, groupId: groupToUnshareId },
     },
   });
+
+  const groupMembers = await prisma.groupMember.findMany({
+    where: { groupId: groupToUnshareId },
+    select: { userId: true },
+  });
+
+  for (const member of groupMembers) {
+    if (member.userId !== req.userId) {
+      notifyUser(member.userId, "pins:changed");
+    }
+  }
 
   res.status(204).send();
 }

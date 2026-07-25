@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { api } from "../api/client";
+import ModalWrapper from "./ModalWrapper";
+import SharePinModal from "./SharePinModal";
+import { useAuth } from "../context/AuthContext";
+import { formatDate } from "../utils/formatDate";
 
 interface PinDetailModalProps {
   pin: {
     id: number;
+    ownerId: number;
     lat: number;
     long: number;
     note: string | null;
@@ -24,10 +29,20 @@ export default function PinDetailModal({
 }: PinDetailModalProps) {
   if (!pin) return null;
 
+  const { user } = useAuth();
+  const isOwner = user?.id === pin.ownerId;
+
   const [editing, setEditing] = useState(false);
   const [editNote, setEditNote] = useState(pin.note || "");
   const [currentNote, setCurrentNote] = useState(pin.note);
   const [saving, setSaving] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+
+  useEffect(() => {
+    setCurrentNote(pin.note);
+    setEditNote(pin.note || "");
+    setEditing(false);
+  }, [pin.id, pin.note]);
 
   async function handleSaveNote() {
     if (!pin) return;
@@ -79,6 +94,16 @@ export default function PinDetailModal({
       </div>
 
       <div className="space-y-3 text-gray-300">
+        <div className="flex items-center">
+          {isOwner && (
+            <button
+              onClick={() => setShowShareModal(true)}
+              className="flex-1 py-2 rounded-xl font-medium transition-all cursor-pointer bg-purple-600 text-white"
+            >
+              Share
+            </button>
+          )}
+        </div>
         <div>
           <span className="text-gray-500 text-sm">Created by</span>
           <p className="text-white font-medium">
@@ -88,7 +113,7 @@ export default function PinDetailModal({
         <div>
           <div className="flex items-center justify-between">
             <span className="text-gray-500 text-sm">Note</span>
-            {!editing && (
+            {!editing && isOwner && (
               <button
                 onClick={() => {
                   setEditNote(currentNote || "");
@@ -154,9 +179,7 @@ export default function PinDetailModal({
         </div>
         <div>
           <span className="text-gray-500 text-sm">Created at</span>
-          <p className="text-white">
-            {new Date(pin.createdAt).toLocaleString()}
-          </p>
+          <p className="text-white">{formatDate(pin.createdAt)}</p>
         </div>
         {onDelete && (
           <button
@@ -170,6 +193,15 @@ export default function PinDetailModal({
           </button>
         )}
       </div>
+      <ModalWrapper
+        show={showShareModal}
+        onClose={() => setShowShareModal(false)}
+      >
+        <SharePinModal
+          pinId={pin.id}
+          onClose={() => setShowShareModal(false)}
+        />
+      </ModalWrapper>
     </>
   );
 }

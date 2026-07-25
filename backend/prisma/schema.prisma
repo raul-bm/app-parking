@@ -61,6 +61,7 @@ model GroupMember {
 model PinShareUser {
     pinId               Int
     userId              Int
+    createdAt           DateTime            @default(now())
 
     pin                 Pin                 @relation(fields: [pinId], references: [id], onDelete: Cascade)
     user                User                @relation(fields: [userId], references: [id])
@@ -71,6 +72,7 @@ model PinShareUser {
 model PinShareGroup {
     pinId               Int
     groupId             Int
+    createdAt           DateTime            @default(now())
 
     pin                 Pin                 @relation(fields: [pinId], references: [id], onDelete: Cascade)
     group               Group               @relation(fields: [groupId], references: [id], onDelete: Cascade)
