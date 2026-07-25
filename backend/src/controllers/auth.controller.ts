@@ -6,11 +6,14 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { ensureAuthenticated } from "../utils/authUtils";
 
 export async function register(req: Request, res: Response) {
-  const { email, password, username, realName } = req.body ?? {};
+  let { email, password, username, realName } = req.body ?? {};
 
   if (!email || !password || !username || !realName) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+
+  email = email.toLowerCase();
+  username = username.toLowerCase();
 
   const existingEmail = await prisma.user.findUnique({ where: { email } });
   if (existingEmail) {
@@ -39,11 +42,13 @@ export async function register(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-  const { identifier, password } = req.body ?? {};
+  let { identifier, password } = req.body ?? {};
 
   if (!identifier || !password) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+
+  identifier = identifier.toLowerCase();
 
   const user = await prisma.user.findFirst({
     where: {

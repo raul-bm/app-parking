@@ -6,11 +6,13 @@ import { prisma } from "../lib/prisma";
 export async function searchUser(req: AuthRequest, res: Response) {
   if (!ensureAuthenticated(req, res)) return;
 
-  const { query } = req.query;
+  let { query } = req.query;
 
   if (!query || typeof query !== "string") {
     return res.status(400).json({ error: "Parameter 'query' is required" });
   }
+
+  query = query.toLowerCase();
 
   const user = await prisma.user.findFirst({
     where: {
