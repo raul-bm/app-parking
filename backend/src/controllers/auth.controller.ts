@@ -13,7 +13,17 @@ export async function register(req: Request, res: Response) {
   }
 
   email = email.toLowerCase();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (emailRegex.test(email)) {
+    return res.status(400).json({ error: "Invalid email format" });
+  }
+
   username = username.toLowerCase();
+
+  if (username.includes(" ")) {
+    return res.status(400).json({ error: "Username cannot contain spaces" });
+  }
 
   const existingEmail = await prisma.user.findUnique({ where: { email } });
   if (existingEmail) {

@@ -26,6 +26,8 @@ export default function RegisterPage() {
     }
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-5">
       <div className="w-full max-w-sm bg-gray-800 rounded-2xl p-8">
@@ -40,11 +42,16 @@ export default function RegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 rounded-xl bg-gray-700 text-white border border-gray-600 placeholder-gray-400 outline-none"
           />
+          {!emailRegex.test(email) && (
+            <p className="text-red-400 text-xs mt-1 text-center">
+              Invalid email format
+            </p>
+          )}
           <input
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value.replace(/\s/g, ""))}
             className="w-full p-3 rounded-xl bg-gray-700 text-white border border-gray-600 placeholder-gray-400 outline-none"
           />
           <input
@@ -64,7 +71,8 @@ export default function RegisterPage() {
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
           <button
             type="submit"
-            className="w-full p-3 rounded-xl bg-purple-600 text-white font-semibold cursor-pointer"
+            className={`w-full p-3 rounded-xl  font-semibold cursor-pointer ${email === "" || !emailRegex.test(email) ? "bg-purple-900 text-gray-500" : "bg-purple-600 text-white"}`}
+            disabled={email === "" || !emailRegex.test(email) ? true : false}
           >
             Register
           </button>
