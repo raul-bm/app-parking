@@ -1,0 +1,144 @@
+{
+  "login": {
+    "title": "Accedir",
+    "inputPlaceholder": "Correu o nom d'usuari",
+    "passwordPlaceholder": "Contrasenya",
+    "loginButton": "Accedir",
+    "dontHaveAccountMessage": "No tens encara un compte?",
+    "register": "Registra't"
+  },
+  "register": {
+    "title": "Registrar-se",
+    "emailPlaceholder": "Correu",
+    "invalidEmailFormat": "Format de correu invàlit",
+    "usernamePlaceholder": "Nom d'usuari",
+    "realNamePlaceholder": "Nom real",
+    "passwordPlaceholder": "Contrasenya",
+    "registerButton": "Registrar-se",
+    "alreadyHaveAccountMessage": "Ja tens un compte?",
+    "login": "Accedix"
+  },
+  "mapPage": {
+    "mapGettingLocation": "Obtenint la teua ubicació...",
+    "notePlaceholder": "Afegeix una nota (p.e. lloc del parking)",
+    "parkSelectedPoint": "Aparca en el lloc seleccionat",
+    "parkOnLocation": "Aparca en la teua ubicació"
+  },
+  "history": {
+    "noPins": "No hi han pins encara"
+  },
+  "pinDetail": {
+    "title": "Detalls del Pin",
+    "shareButton": "Compartir",
+    "createdBy": "Creat per",
+    "unknown": "Desconegut",
+    "note": "Nota",
+    "addNote": "Afegeix una nota...",
+    "cancelEditNote": "Cancel·lar",
+    "saveEditNote": "Guardar",
+    "savingEditNote": "Guardant...",
+    "noNotes": "No hi han notes",
+    "createdAt": "Creat el",
+    "deletePin": "Borrar pin"
+  },
+  "sharePin": {
+    "title": "Compartir pin",
+    "friends": "Amics",
+    "groups": "Grups",
+    "loading": "Cargant...",
+    "noFriends": "No tens amics encara",
+    "noGroups": "No estàs en nignún grup encara",
+    "members": "membres",
+    "shareButton": "Compartir",
+    "stopSharingButton": "Deixar de compartir"
+  },
+  "friends": {
+    "title": "Amics",
+    "addFriend": "Afegir amic",
+    "sent": "Enviats",
+    "received": "Rebuts",
+    "noFriends": "No tens amics encara",
+    "removeFriend": "Eliminar amic"
+  },
+  "addFriend": {
+    "title": "Afegir amic",
+    "inputPlaceholder": "Correu o nom d'usuari",
+    "addButton": "Afegir",
+    "success1": "L'usuari",
+    "success2": "s'ha afegit correctament"
+  },
+  "sentRequests": {
+    "title": "Peticions enviades",
+    "noRequests": "No hi han peticions enviades",
+    "cancel": "Cancel·lar"
+  },
+  "receivedRequests": {
+    "title": "Peticions rebudes",
+    "noRequests": "No hi han peticions rebudes",
+    "cancel": "Cancel·lar",
+    "accept": "Acceptar"
+  },
+  "groups": {
+    "title": "Grups",
+    "createGroup": "Crear grup",
+    "noGroups": "No estàs en ningún grup encara",
+    "members": "membres"
+  },
+  "createGroup": {
+    "title": "Crear grup",
+    "inputPlaceholder": "Nom del grup",
+    "createButton": "Crear"
+  },
+  "groupDetail": {
+    "title": "Grup:",
+    "addMember": "Afegir membre",
+    "ownerOnly": "sols pot el creador",
+    "inputPlaceholder": "Correu o nom d'usuari",
+    "addButton": "Afegir",
+    "members": "Membres",
+    "owner": "Creador",
+    "removeMember": "El·liminar membre",
+    "deleteGroup": "Borrar grup",
+    "successAdd1": "Afegit l'usuari",
+    "successAdd2": "correctament!"
+  },
+  "sharedWithMe": {
+    "title": "Compartits amb mi",
+    "noPins": "No t'han compartit ningún pin encara",
+    "sharedAt": "Compartit el:",
+    "sharedBy": "Compartit per",
+    "throughGroup": "Mitjançant el grup:"
+  },
+  "nav": {
+    "map": "Mapa",
+    "history": "Historial",
+    "friends": "Amics",
+    "groups": "Grups",
+    "pins-shared": "Compartits",
+    "options": "Opcions",
+    "logout": "Tancar sessió",
+    "languages": "Llenguatges",
+    "back": "Tornar",
+    "english": "Anglés",
+    "spanish": "Espanyol",
+    "valencian": "Valencià"
+  },
+  "errors": {
+    "NOT_AUTHORIZED": "No estás autoritzat per fer aquesta acció",
+    "MISSING_DATA": "Falten dades necessaries",
+    "INVALID_EMAIL": "El format del correu no es vàlid",
+    "USERNAME_SPACES": "El nom d'usuari no pot contindre espais",
+    "EMAIL_REGISTERED": "Aquest correu ja està registrat",
+    "USERNAME_USED": "Aquest nom d'usuari ja està utilitzant-se",
+    "INVALID_CREDENTIALS": "Les credencials no són vàlides",
+    "NOT_FOUND": "El que estàs buscant no es pot trobar",
+    "ALREADY_FRIENDS": "Ja sou amics",
+    "PENDING_REQUEST": "Aquesta petició ja existeix",
+    "REQUEST_NOT_PENDING": "Aquesta petició ja s'ha acceptat/rebutjat",
+    "CANT_DO_ACTION": "No pots fer aquesta acció",
+    "ALREADY_IN_GROUP": "El usuari ja està en el grup",
+    "NOT_MEMBER": "El usuari no es membre d'aquest grup",
+    "ALREADY_SHARED": "Ja se está compartint",
+    "NOT_SHARED": "No està compartit"
+  }
+}

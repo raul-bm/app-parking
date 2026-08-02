@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../api/client";
+import { useTranslation } from "react-i18next";
 
 interface ReceivedRequestsModalProps {
   requests: Array<{
@@ -19,6 +20,8 @@ export default function ReceivedRequestsModal({
   onClose,
   onUpdated,
 }: ReceivedRequestsModalProps) {
+  const { t } = useTranslation();
+
   const [disabledId, setDisabledId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [errorId, setErrorId] = useState<number | null>(null);
@@ -64,7 +67,9 @@ export default function ReceivedRequestsModal({
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Received Requests</h2>
+        <h2 className="text-white text-xl font-bold">
+          {t("receivedRequests.title")}
+        </h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -73,7 +78,9 @@ export default function ReceivedRequestsModal({
         </button>
       </div>
       {requests.length === 0 ? (
-        <p className="text-gray-400 text-center mt-10">No requests</p>
+        <p className="text-gray-400 text-center mt-10">
+          {t("receivedRequests.noRequests")}
+        </p>
       ) : (
         <div className="space-y-3">
           {requests.map((request) => (
@@ -90,14 +97,14 @@ export default function ReceivedRequestsModal({
                   className="py-1 px-3 rounded-xl bg-red-700 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                   disabled={request.id === disabledId}
                 >
-                  Cancel
+                  {t("receivedRequests.cancel")}
                 </button>
                 <button
                   onClick={() => handleAcceptRequest(request.id)}
                   className="py-1 px-3 rounded-xl bg-green-700 text-white font-semibold hover:bg-green-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                   disabled={request.id === disabledId}
                 >
-                  Accept
+                  {t("receivedRequests.accept")}
                 </button>
               </div>
               {error && errorId === request.id && (

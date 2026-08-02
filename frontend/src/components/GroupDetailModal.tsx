@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface GroupDetailModalProps {
   group: any;
@@ -15,6 +16,8 @@ export default function GroupDetailModal({
   onUpdated,
   currentUserId,
 }: GroupDetailModalProps) {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
 
   const [searchUserAdd, setSearchUserAdd] = useState("");
@@ -36,7 +39,9 @@ export default function GroupDetailModal({
         method: "POST",
         body: JSON.stringify({ userId: user.id }),
       });
-      setSuccess(`Added the user @${user.username} successfully!`);
+      setSuccess(
+        `${t("groupDetail.successAdd1")} @${user.username} ${t("groupDetail.successAdd2")}`,
+      );
       onUpdated();
     } catch (err: any) {
       console.error(err);
@@ -49,7 +54,9 @@ export default function GroupDetailModal({
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Group: {group.name}</h2>
+        <h2 className="text-white text-xl font-bold">
+          {t("groupDetail.title")} {group.name}
+        </h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -60,7 +67,8 @@ export default function GroupDetailModal({
       {user?.id === group.ownerId && (
         <div className="mb-4">
           <h3 className="text-gray-400 text-sm font-medium mb-2">
-            Add member <span className="text-xs">(owner only)</span>
+            {t("groupDetail.addMember")}{" "}
+            <span className="text-xs">({t("groupDetail.ownerOnly")})</span>
           </h3>
           <form
             onSubmit={(e) => {
@@ -72,7 +80,7 @@ export default function GroupDetailModal({
             <input
               value={searchUserAdd}
               onChange={(e) => setSearchUserAdd(e.target.value)}
-              placeholder="Username or Email"
+              placeholder={t("groupDetail.inputPlaceholder")}
               className="flex-1 bg-gray-700 text-white rounded-lg px-3 py-2 text-sm border border-gray-600 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none placeholder-gray-500"
             />
             <button
@@ -80,7 +88,7 @@ export default function GroupDetailModal({
               disabled={loadingAdd}
               className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-500 transition-colors disabled:opacity-50 cursor-pointer"
             >
-              Add
+              {t("groupDetail.addButton")}
             </button>
           </form>
           {error && <p className="text-red-400 text-center mt-5">{error}</p>}
@@ -91,7 +99,7 @@ export default function GroupDetailModal({
       )}
       <div>
         <h3 className="text-gray-400 text-sm font-medium mb-2">
-          Members ({group.members.length})
+          {t("groupDetail.members")} ({group.members.length})
         </h3>
         <div className="space-y-2">
           {group.members.map((member: any) => (
@@ -108,7 +116,7 @@ export default function GroupDetailModal({
               <div className="flex items-center gap-2">
                 {member.user.id === group.ownerId && (
                   <span className="text-xs text-purple-400 font-medium">
-                    Owner
+                    {t("groupDetail.owner")}
                   </span>
                 )}
                 {currentUserId === group.ownerId &&
@@ -130,7 +138,7 @@ export default function GroupDetailModal({
                       className="py-1 px-2 rounded-xl bg-red-800 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer text-xs"
                       title="Remove member"
                     >
-                      Remove member
+                      {t("groupDetail.removeMember")}
                     </button>
                   )}
               </div>
@@ -151,7 +159,7 @@ export default function GroupDetailModal({
           }}
           className="w-full mt-6 py-2 rounded-xl bg-red-700 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
         >
-          Delete group
+          {t("groupDetail.deleteGroup")}
         </button>
       )}
     </>

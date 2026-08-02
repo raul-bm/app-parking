@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/client";
+import { useTranslation } from "react-i18next";
 
 interface SharePinModalProps {
   pinId: number;
@@ -7,6 +8,8 @@ interface SharePinModalProps {
 }
 
 export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
+  const { t } = useTranslation();
+
   const [activeTab, setActiveTab] = useState<"friends" | "groups">("friends");
   const [friends, setFriends] = useState<any[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
@@ -101,7 +104,7 @@ export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Share pin</h2>
+        <h2 className="text-white text-xl font-bold">{t("sharePin.title")}</h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -114,22 +117,26 @@ export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
           onClick={() => setActiveTab("friends")}
           className={`flex-1 py-2 rounded-xl font-medium transition-all cursor-pointer ${activeTab === "friends" ? "bg-purple-600 text-white" : "bg-purple-800 text-gray-500 hover:bg-purple-700"}`}
         >
-          Friends
+          {t("sharePin.friends")}
         </button>
         <button
           onClick={() => setActiveTab("groups")}
           className={`flex-1 py-2 rounded-xl font-medium transition-all cursor-pointer ${activeTab === "groups" ? "bg-purple-600 text-white" : "bg-purple-800 text-gray-500 hover:bg-purple-700"}`}
         >
-          Groups
+          {t("sharePin.groups")}
         </button>
       </div>
 
       {loading ? (
-        <p className="text-gray-400 text-center py-8">Loading...</p>
+        <p className="text-gray-400 text-center py-8">
+          {t("sharePin.loading")}
+        </p>
       ) : activeTab === "friends" ? (
         <div className="space-y-2 max-h-60 overflow-y-auto">
           {friends.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No friends yet</p>
+            <p className="text-gray-500 text-center py-8">
+              {t("sharePin.noFriends")}
+            </p>
           ) : (
             friends.map((friend: any) => {
               const isShared = sharedWithUserIds.has(friend.id);
@@ -148,7 +155,9 @@ export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
                     onClick={() => handleToggleUserShare(friend.id)}
                     className={`py-1.5 px-3 rounded-lg text-xs font-medium transition-all cursor-pointer ${isShared ? "bg-red-700 text-white hover:bg-red-600" : "bg-purple-600 text-white hover:bg-purple-500"}`}
                   >
-                    {isShared ? "Stop sharing" : "Share"}
+                    {isShared
+                      ? t("sharePin.stopSharingButton")
+                      : t("sharePin.shareButton")}
                   </button>
                 </div>
               );
@@ -158,7 +167,9 @@ export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
       ) : (
         <div className="space-y-2 max-h-60 overflow-y-auto">
           {groups.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No groups yet</p>
+            <p className="text-gray-500 text-center py-8">
+              {t("sharePin.noGroups")}
+            </p>
           ) : (
             groups.map((group: any) => {
               const isShared = sharedWithGroupIds.has(group.id);
@@ -172,7 +183,7 @@ export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
                       {group.name}
                     </p>
                     <p className="text-gray-400 text-xs">
-                      {group.members?.length} members
+                      {group.members?.length} {t("sharePin.members")}
                     </p>
                   </div>
                   <button
@@ -183,7 +194,9 @@ export default function SharePinModal({ pinId, onClose }: SharePinModalProps) {
                         : "bg-purple-600 text-white hover:bg-purple-500"
                     }`}
                   >
-                    {isShared ? "Stop sharing" : "Share"}
+                    {isShared
+                      ? t("sharePin.stopSharingButton")
+                      : t("sharePin.shareButton")}
                   </button>
                 </div>
               );

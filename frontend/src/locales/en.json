@@ -1,0 +1,144 @@
+{
+  "login": {
+    "title": "Login",
+    "inputPlaceholder": "Email or username",
+    "passwordPlaceholder": "Password",
+    "loginButton": "Login",
+    "dontHaveAccountMessage": "Don't have an account?",
+    "register": "Register"
+  },
+  "register": {
+    "title": "Register",
+    "emailPlaceholder": "Email",
+    "invalidEmailFormat": "Invalid email format",
+    "usernamePlaceholder": "Username",
+    "realNamePlaceholder": "Real name",
+    "passwordPlaceholder": "Password",
+    "registerButton": "Register",
+    "alreadyHaveAccountMessage": "Already have an account?",
+    "login": "Login"
+  },
+  "mapPage": {
+    "mapGettingLocation": "Getting your location...",
+    "notePlaceholder": "Add a note (e.g. parking spot number)",
+    "parkSelectedPoint": "Park at selected point",
+    "parkOnLocation": "Park in your location"
+  },
+  "history": {
+    "noPins": "No pins yet"
+  },
+  "pinDetail": {
+    "title": "Pin Details",
+    "shareButton": "Share",
+    "createdBy": "Created by",
+    "unknown": "Unknown",
+    "note": "Note",
+    "addNote": "Add a note...",
+    "cancelEditNote": "Cancel",
+    "saveEditNote": "Save",
+    "savingEditNote": "Saving...",
+    "noNotes": "No notes",
+    "createdAt": "Created at",
+    "deletePin": "Delete pin"
+  },
+  "sharePin": {
+    "title": "Share pin",
+    "friends": "Friends",
+    "groups": "Groups",
+    "loading": "Loading...",
+    "noFriends": "No friends yet",
+    "noGroups": "No groups yet",
+    "members": "members",
+    "shareButton": "Share",
+    "stopSharingButton": "Stop sharing"
+  },
+  "friends": {
+    "title": "Friends",
+    "addFriend": "Add friend",
+    "sent": "Sent",
+    "received": "Received",
+    "noFriends": "No friends yet",
+    "removeFriend": "Remove friend"
+  },
+  "addFriend": {
+    "title": "Add friend",
+    "inputPlaceholder": "Email or username",
+    "addButton": "Add",
+    "success1": "The user",
+    "success2": "added successfully"
+  },
+  "sentRequests": {
+    "title": "Sent Requests",
+    "noRequests": "No sent requests",
+    "cancel": "Cancel"
+  },
+  "receivedRequests": {
+    "title": "Received Requests",
+    "noRequests": "No requests",
+    "cancel": "Cancel",
+    "accept": "Accept"
+  },
+  "groups": {
+    "title": "Groups",
+    "createGroup": "Create group",
+    "noGroups": "You aren't in any groups yet",
+    "members": "members"
+  },
+  "createGroup": {
+    "title": "Create group",
+    "inputPlaceholder": "Group name",
+    "createButton": "Create"
+  },
+  "groupDetail": {
+    "title": "Group:",
+    "addMember": "Add member",
+    "ownerOnly": "owner only",
+    "inputPlaceholder": "Email or username",
+    "addButton": "Add",
+    "members": "Members",
+    "owner": "Owner",
+    "removeMember": "Remove member",
+    "deleteGroup": "Delete group",
+    "successAdd1": "Added the user",
+    "successAdd2": "successfully!"
+  },
+  "sharedWithMe": {
+    "title": "Shared with me",
+    "noPins": "No pins shared with you yet",
+    "sharedAt": "Shared at:",
+    "sharedBy": "Shared by",
+    "throughGroup": "Through group:"
+  },
+  "nav": {
+    "map": "Map",
+    "history": "History",
+    "friends": "Friends",
+    "groups": "Groups",
+    "pins-shared": "Shared",
+    "options": "Options",
+    "logout": "Logout",
+    "languages": "Languages",
+    "back": "Back",
+    "english": "English",
+    "spanish": "Spanish",
+    "valencian": "Valencian"
+  },
+  "errors": {
+    "NOT_AUTHORIZED": "Not authorized to do this action",
+    "MISSING_DATA": "Missing required data",
+    "INVALID_EMAIL": "Invalid email format",
+    "USERNAME_SPACES": "Username cannot contain spaces",
+    "EMAIL_REGISTERED": "The email is already registered",
+    "USERNAME_USED": "The username is already used",
+    "INVALID_CREDENTIALS": "Invalid credentials",
+    "NOT_FOUND": "What you are seraching was not found",
+    "ALREADY_FRIENDS": "Already friends",
+    "PENDING_REQUEST": "A pending request already exists",
+    "REQUEST_NOT_PENDING": "This request is no longer pending",
+    "CANT_DO_ACTION": "You can't do that action",
+    "ALREADY_IN_GROUP": "User already in group",
+    "NOT_MEMBER": "User is not a member of this group",
+    "ALREADY_SHARED": "Already shared",
+    "NOT_SHARED": "Not shared"
+  }
+}

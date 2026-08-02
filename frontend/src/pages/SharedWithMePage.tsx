@@ -11,6 +11,7 @@ import {
   onPinsChanged,
 } from "../services/socket";
 import { formatDate } from "../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 function getLatestShareDate(pin: any): string {
   let latest = "";
@@ -26,6 +27,8 @@ function getLatestShareDate(pin: any): string {
 }
 
 export default function SharedWithMePage() {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [pins, setPins] = useState<any[]>([]);
   const [selectedPin, setSelectedPin] = useState<any>(null);
@@ -70,12 +73,12 @@ export default function SharedWithMePage() {
   return (
     <div className="h-full bg-gray-900 p-4 overflow-y-auto">
       <h1 className="text-white text-2xl font-bold mb-4 text-center mt-4">
-        Shared with me
+        {t("sharedWithMe.title")}
       </h1>
 
       {pins.length === 0 ? (
         <p className="text-gray-400 text-center mt-10">
-          No pins shared with you yet
+          {t("sharedWithMe.noPins")}
         </p>
       ) : (
         <div className="space-y-3">
@@ -90,19 +93,22 @@ export default function SharedWithMePage() {
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-gray-400 text-xs">
-                    Shared at: {formatDate(sharedDate)}
+                    {t("sharedWithMe.sharedAt")} {formatDate(sharedDate)}
                   </p>
                   <p className="text-white mt-1 truncate">
                     {pin.note || (
-                      <span className="text-gray-500 italic">No notes</span>
+                      <span className="text-gray-500 italic">
+                        {t("pinDetail.noNotes")}
+                      </span>
                     )}
                   </p>
                   <p className="text-purple-400 text-xs mt-1">
-                    Shared by {pin.owner?.realName || "Unknown"}
+                    {t("sharedWithMe.sharedBy")}{" "}
+                    {pin.owner?.realName || t("pinDetail.unknown")}
                   </p>
                   {pin.sharedWithGroups?.length > 0 && (
                     <p className="text-indigo-400 text-xs">
-                      Through group:{" "}
+                      {t("sharedWithMe.throughGroup")}{" "}
                       {pin.sharedWithGroups
                         .map((s: any) => s.group.name)
                         .join(", ")}

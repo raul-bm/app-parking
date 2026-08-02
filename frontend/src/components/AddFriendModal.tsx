@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../api/client";
+import { useTranslation } from "react-i18next";
 
 interface AddFriendModalProps {
   onClose: () => void;
@@ -10,6 +11,8 @@ export default function AddFriendModal({
   onClose,
   onFriendAdded,
 }: AddFriendModalProps) {
+  const { t } = useTranslation();
+
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -29,7 +32,7 @@ export default function AddFriendModal({
         method: "POST",
       });
       setSuccess(
-        `The user "${friendRequest.addressee.username}" added successfully`,
+        `${t("addFriend.success1")} "${friendRequest.addressee.username}" ${t("addFriend.success2")}`,
       );
       onFriendAdded();
     } catch (err: any) {
@@ -43,7 +46,7 @@ export default function AddFriendModal({
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Add friend</h2>
+        <h2 className="text-white text-xl font-bold">{t("addFriend.title")}</h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -61,7 +64,7 @@ export default function AddFriendModal({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Email or username"
+          placeholder={t("addFriend.inputPlaceholder")}
           className="flex-1 bg-gray-700 text-white rounded-lg px-3 py-2 border border-gray-600 focus:border-purple-500"
           disabled={loading}
         />
@@ -70,7 +73,7 @@ export default function AddFriendModal({
           className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-500 transition-colors cursor-pointer"
           disabled={loading}
         >
-          Add
+          {t("addFriend.addButton")}
         </button>
       </form>
       {error && <p className="text-red-400 text-center mt-5">{error}</p>}

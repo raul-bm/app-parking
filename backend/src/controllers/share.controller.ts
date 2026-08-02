@@ -18,11 +18,11 @@ export async function sharePinWithUser(req: AuthRequest, res: Response) {
   });
 
   if (!pin) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (pin.ownerId !== req.userId) {
-    return res.status(403).json({ error: "Not authorized to share this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const userToShare = await prisma.user.findUnique({
@@ -30,11 +30,11 @@ export async function sharePinWithUser(req: AuthRequest, res: Response) {
   });
 
   if (!userToShare) {
-    return res.status(404).json({ error: "User doesn't exist" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (req.userId === userId) {
-    return res.status(400).json({ error: "Can't share to self" });
+    return res.status(400).json({ code: "CANT_DO_ACTION" });
   }
 
   const isAlreadySharedWithUser = pin.sharedWithUsers.some(
@@ -42,9 +42,7 @@ export async function sharePinWithUser(req: AuthRequest, res: Response) {
   );
 
   if (isAlreadySharedWithUser) {
-    return res
-      .status(400)
-      .json({ error: "This pin is already shared with the user" });
+    return res.status(400).json({ code: "ALREADY_SHARED" });
   }
 
   const newShareWithUser = await prisma.pinShareUser.create({
@@ -70,11 +68,11 @@ export async function sharePinWithGroup(req: AuthRequest, res: Response) {
   });
 
   if (!pin) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (pin.ownerId !== req.userId) {
-    return res.status(403).json({ error: "Not authorized to share this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const group = await prisma.group.findUnique({
@@ -85,7 +83,7 @@ export async function sharePinWithGroup(req: AuthRequest, res: Response) {
   });
 
   if (!group) {
-    return res.status(404).json({ error: "Group not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   const userIsInGroup = group.members.some(
@@ -93,7 +91,7 @@ export async function sharePinWithGroup(req: AuthRequest, res: Response) {
   );
 
   if (!userIsInGroup) {
-    return res.status(403).json({ error: "The user is not on the group" });
+    return res.status(403).json({ code: "NOT_FOUND" });
   }
 
   const pinIsAlreadyShareInGroup = pin.sharedWithGroups.some(
@@ -101,9 +99,7 @@ export async function sharePinWithGroup(req: AuthRequest, res: Response) {
   );
 
   if (pinIsAlreadyShareInGroup) {
-    return res
-      .status(400)
-      .json({ error: "Pin is already shared in the group" });
+    return res.status(400).json({ code: "ALREADY_SHARED" });
   }
 
   const newShareWithGroup = await prisma.pinShareGroup.create({
@@ -133,13 +129,11 @@ export async function unsharePinWithUser(req: AuthRequest, res: Response) {
   });
 
   if (!pin) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (pin.ownerId !== req.userId) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to unshare this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const user = await prisma.user.findUnique({
@@ -147,11 +141,11 @@ export async function unsharePinWithUser(req: AuthRequest, res: Response) {
   });
 
   if (!user) {
-    return res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (userToUnshareId === req.userId) {
-    return res.status(400).json({ error: "Can't unshare the pin to self" });
+    return res.status(400).json({ code: "CANT_DO_ACTION" });
   }
 
   const pinIsSharedWithUser = pin.sharedWithUsers.some(
@@ -159,7 +153,7 @@ export async function unsharePinWithUser(req: AuthRequest, res: Response) {
   );
 
   if (!pinIsSharedWithUser) {
-    return res.status(400).json({ error: "Pin is not shared with user" });
+    return res.status(400).json({ code: "NOT_SHARED" });
   }
 
   await prisma.pinShareUser.delete({
@@ -187,13 +181,11 @@ export async function unsharePinWithGroup(req: AuthRequest, res: Response) {
   });
 
   if (!pin) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (pin.ownerId !== req.userId) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to unshare this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const group = await prisma.group.findUnique({
@@ -201,7 +193,7 @@ export async function unsharePinWithGroup(req: AuthRequest, res: Response) {
   });
 
   if (!group) {
-    return res.status(404).json({ error: "Group not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   const pinIsSharedWithGroup = pin.sharedWithGroups.some(
@@ -209,7 +201,7 @@ export async function unsharePinWithGroup(req: AuthRequest, res: Response) {
   );
 
   if (!pinIsSharedWithGroup) {
-    return res.status(400).json({ error: "Pin is not shared with group" });
+    return res.status(400).json({ code: "NOT_SHARED" });
   }
 
   await prisma.pinShareGroup.delete({

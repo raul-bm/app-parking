@@ -5,8 +5,11 @@ import MapPreview from "../components/MapPreview";
 import PinDetailModal from "../components/PinDetailModal";
 import ModalWrapper from "../components/ModalWrapper";
 import { formatDate } from "../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 export default function HistoryPage() {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [pins, setPins] = useState<any[]>([]);
   const [selectedPin, setSelectedPin] = useState<any>(null);
@@ -32,11 +35,11 @@ export default function HistoryPage() {
   return (
     <div className="h-full bg-gray-900 p-4 overflow-y-auto">
       <h1 className="text-white text-2xl font-bold mb-4 text-center mt-4">
-        History
+        {t("nav.history")}
       </h1>
 
       {pins.length === 0 ? (
-        <p className="text-gray-400 text-center mt-10">No pins yet</p>
+        <p className="text-gray-400 text-center mt-10">{t("history.noPins")}</p>
       ) : (
         <div className="space-y-3">
           {pins.map((pin) => (
@@ -52,7 +55,9 @@ export default function HistoryPage() {
                 </p>
                 <p className="text-white mt-1 truncate">
                   {pin.note || (
-                    <span className="text-gray-500 italic">No notes</span>
+                    <span className="text-gray-500 italic">
+                      {t("pinDetail.noNotes")}
+                    </span>
                   )}
                 </p>
               </div>

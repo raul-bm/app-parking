@@ -10,7 +10,7 @@ export async function createPin(req: AuthRequest, res: Response) {
   const { lat, long, note } = req.body ?? {};
 
   if (lat === undefined || long === undefined) {
-    return res.status(400).json({ error: "Missing required data (lat/long)" });
+    return res.status(400).json({ code: "MISSING_DATA" });
   }
 
   const pin = await prisma.pin.create({
@@ -64,11 +64,11 @@ export async function deletePin(req: AuthRequest, res: Response) {
   });
 
   if (!pinWithShares) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (pinWithShares.ownerId !== req.userId) {
-    return res.status(403).json({ error: "Not authorized to delete this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const notifiedUsers = new Set<number>();
@@ -109,7 +109,7 @@ export async function getSpecificPin(req: AuthRequest, res: Response) {
   });
 
   if (!pin) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   const isOwner = pin.ownerId === req.userId;
@@ -124,7 +124,7 @@ export async function getSpecificPin(req: AuthRequest, res: Response) {
   });
 
   if (!isOwner && !isSharedWithUser && !isSharedWithGroup) {
-    return res.status(403).json({ error: "Not authorized to view this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   res.json(pin);
@@ -176,11 +176,11 @@ export async function updatePin(req: AuthRequest, res: Response) {
   });
 
   if (!pin) {
-    return res.status(404).json({ error: "Pin not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (pin.ownerId !== req.userId) {
-    return res.status(403).json({ error: "Not authorized to update this pin" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const updated = await prisma.pin.update({

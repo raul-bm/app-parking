@@ -9,7 +9,7 @@ export async function searchUser(req: AuthRequest, res: Response) {
   let { query } = req.query;
 
   if (!query || typeof query !== "string") {
-    return res.status(400).json({ error: "Parameter 'query' is required" });
+    return res.status(400).json({ code: "MISSING_DATA" });
   }
 
   query = query.toLowerCase();
@@ -25,7 +25,7 @@ export async function searchUser(req: AuthRequest, res: Response) {
   });
 
   if (!user) {
-    return res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   res.json(user);

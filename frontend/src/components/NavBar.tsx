@@ -1,10 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const navItems = [
   {
-    label: "Map",
+    labelKey: "nav.map",
     path: "/map",
     icon: (
       <svg
@@ -24,7 +26,7 @@ const navItems = [
     ),
   },
   {
-    label: "History",
+    labelKey: "nav.history",
     path: "/history",
     icon: (
       <svg
@@ -44,7 +46,7 @@ const navItems = [
     ),
   },
   {
-    label: "Friends",
+    labelKey: "nav.friends",
     path: "/friends",
     icon: (
       <svg
@@ -64,7 +66,7 @@ const navItems = [
     ),
   },
   {
-    label: "Groups",
+    labelKey: "nav.groups",
     path: "/groups",
     icon: (
       <svg
@@ -84,7 +86,7 @@ const navItems = [
     ),
   },
   {
-    label: "Pins shared",
+    labelKey: "nav.pins-shared",
     path: "/shared-with-me",
     icon: (
       <svg
@@ -106,13 +108,15 @@ const navItems = [
 ];
 
 export default function NavBar() {
+  const { t } = useTranslation();
+
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  const [optionsMenu, setOptionsMenu] = useState<"closed" | "open" | "closing">(
-    "closed",
-  );
+  const [optionsMenu, setOptionsMenu] = useState<
+    "closed" | "open" | "closing" | "languages"
+  >("closed");
   const optionsRef = useRef<HTMLDivElement>(null);
 
   function handleLogout() {
@@ -136,7 +140,7 @@ export default function NavBar() {
       if (
         optionsRef.current &&
         !optionsRef.current.contains(e.target as Node) &&
-        optionsMenu === "open"
+        (optionsMenu === "open" || optionsMenu === "languages")
       ) {
         closeOptions();
       }
@@ -158,14 +162,20 @@ export default function NavBar() {
               className={`flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-200 ${isActive ? "text-purple-400 scale-110" : "text-gray-500"}`}
             >
               {item.icon}
-              <span className="text-[10px] font-medium">{item.label}</span>
+              <span className="text-[10px] font-medium">
+                {t(item.labelKey)}
+              </span>
             </button>
           );
         })}
         <div ref={optionsRef} className="relative">
           <button
             onClick={() => {
-              if (optionsMenu === "open" || optionsMenu === "closing") {
+              if (
+                optionsMenu === "open" ||
+                optionsMenu === "closing" ||
+                optionsMenu === "languages"
+              ) {
                 closeOptions();
               } else {
                 openOptions();
@@ -192,13 +202,145 @@ export default function NavBar() {
                 d="M4.867 19.125h.008v.008h-.008v-.008Z"
               />
             </svg>
-            <span className="text-[10px] font-medium">Options</span>
+            <span className="text-[10px] font-medium">{t("nav.options")}</span>
           </button>
 
           {optionsMenu !== "closed" && (
             <div
-              className={`absolute bottom-full right-0 mb-2 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-xl shadow-black/40 overflow-hidden ${optionsMenu === "open" ? "animate-slide-up" : "animate-slide-down"}`}
+              className={`absolute bottom-full right-0 mb-2 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-xl shadow-black/40 overflow-hidden z-10000 ${optionsMenu === "open" || optionsMenu === "languages" ? "animate-slide-up" : "animate-slide-down"}`}
             >
+              {optionsMenu === "languages" && (
+                <div className="border-b border-gray-700">
+                  <button
+                    onClick={() => i18n.changeLanguage("es")}
+                    className="w-full flex items-center justify-between px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                  >
+                    <span>{t("nav.spanish")}</span>
+                    {i18n.language.startsWith("es") && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="size-5 text-purple-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => i18n.changeLanguage("en")}
+                    className="w-full flex items-center justify-between px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                  >
+                    <span>{t("nav.english")}</span>
+                    {i18n.language.startsWith("en") && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="size-5 text-purple-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => i18n.changeLanguage("val")}
+                    className="w-full flex items-center justify-between px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                  >
+                    <span>{t("nav.valencian")}</span>
+                    {i18n.language.startsWith("val") && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="size-5 text-purple-400"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m4.5 12.75 6 6 9-13.5"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setOptionsMenu("open")}
+                    className="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                      />
+                    </svg>
+                    {t("nav.back")}
+                  </button>
+                </div>
+              )}
+              <button
+                onClick={() =>
+                  setOptionsMenu(
+                    optionsMenu === "languages" ? "open" : "languages",
+                  )
+                }
+                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+                  optionsMenu === "languages"
+                    ? "bg-gray-700 text-purple-400"
+                    : "text-gray-300 hover:bg-gray-700"
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.78.147 2.653.255"
+                  />
+                </svg>
+                {t("nav.languages")}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="size-4 ml-auto"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-red-400
@@ -218,7 +360,7 @@ export default function NavBar() {
                     d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
                   />
                 </svg>
-                Logout
+                {t("nav.logout")}
               </button>
             </div>
           )}

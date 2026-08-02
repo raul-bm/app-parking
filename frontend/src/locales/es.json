@@ -1,0 +1,144 @@
+{
+  "login": {
+    "title": "Acceder",
+    "inputPlaceholder": "Correo o nombre de usuario",
+    "passwordPlaceholder": "Contraseña",
+    "loginButton": "Acceder",
+    "dontHaveAccountMessage": "¿No tienes una cuenta aún?",
+    "register": "Regístrate"
+  },
+  "register": {
+    "title": "Registrarse",
+    "emailPlaceholder": "Correo",
+    "invalidEmailFormat": "Formato de correo inválido",
+    "usernamePlaceholder": "Nombre de usuario",
+    "realNamePlaceholder": "Nombre real",
+    "passwordPlaceholder": "Contraseña",
+    "registerButton": "Registrarse",
+    "alreadyHaveAccountMessage": "¿Ya tienes una cuenta?",
+    "login": "Accede"
+  },
+  "mapPage": {
+    "mapGettingLocation": "Accediendo a tu ubicación...",
+    "notePlaceholder": "Añade una nota (p.e. número del parking)",
+    "parkSelectedPoint": "Aparca en el lugar seleccionado",
+    "parkOnLocation": "Aparca en tu ubicación"
+  },
+  "history": {
+    "noPins": "No hay pines aún"
+  },
+  "pinDetail": {
+    "title": "Detalles del Pin",
+    "shareButton": "Compartir",
+    "createdBy": "Creado por",
+    "unknown": "Desconocido",
+    "note": "Nota",
+    "addNote": "Añade una nota...",
+    "cancelEditNote": "Cancelar",
+    "saveEditNote": "Guardar",
+    "savingEditNote": "Guardando...",
+    "noNotes": "No hay notas",
+    "createdAt": "Creado el",
+    "deletePin": "Borrar pin"
+  },
+  "sharePin": {
+    "title": "Compartir pin",
+    "friends": "Amigos",
+    "groups": "Grupos",
+    "loading": "Cargando...",
+    "noFriends": "No tienes amigos aún",
+    "noGroups": "No estás en ningún grupo aún",
+    "members": "miembros",
+    "shareButton": "Compartir",
+    "stopSharingButton": "Dejar de compartir"
+  },
+  "friends": {
+    "title": "Amigos",
+    "addFriend": "Añadir amigo",
+    "sent": "Enviados",
+    "received": "Recibidos",
+    "noFriends": "No tienes amigos aún",
+    "removeFriend": "Eliminar amigo"
+  },
+  "addFriend": {
+    "title": "Añadir amigo",
+    "inputPlaceholder": "Correo o nombre de usuario",
+    "addButton": "Añadir",
+    "success1": "El usuario",
+    "success2": "se ha añadido correctamente"
+  },
+  "sentRequests": {
+    "title": "Peticiones enviadas",
+    "noRequests": "No hay peticiones enviadas",
+    "cancel": "Cancelar"
+  },
+  "receivedRequests": {
+    "title": "Peticiones recibidas",
+    "noRequests": "No hay peticiones recibidas",
+    "cancel": "Cancelar",
+    "accept": "Aceptar"
+  },
+  "groups": {
+    "title": "Grupos",
+    "createGroup": "Crear grupo",
+    "noGroups": "No estás en ningún grupo aún",
+    "members": "miembros"
+  },
+  "createGroup": {
+    "title": "Crear grupo",
+    "inputPlaceholder": "Nombre del grupo",
+    "createButton": "Crear"
+  },
+  "groupDetail": {
+    "title": "Grupo:",
+    "addMember": "Añadir miembro",
+    "ownerOnly": "solo puede el creador",
+    "inputPlaceholder": "Correo o nombre de usuario",
+    "addButton": "Añadir",
+    "members": "Miembros",
+    "owner": "Creador",
+    "removeMember": "Eliminar miembro",
+    "deleteGroup": "Borrar grupo",
+    "successAdd1": "Añadido al usuario",
+    "successAdd2": "correctamente!"
+  },
+  "sharedWithMe": {
+    "title": "Compartidos conmigo",
+    "noPins": "No te han compartido ningún pin aún",
+    "sharedAt": "Compartido el:",
+    "sharedBy": "Compartido por",
+    "throughGroup": "Mediante el grupo:"
+  },
+  "nav": {
+    "map": "Mapa",
+    "history": "Historial",
+    "friends": "Amigos",
+    "groups": "Grupos",
+    "pins-shared": "Compartidos",
+    "options": "Opciones",
+    "logout": "Cerrar sesión",
+    "languages": "Lenguajes",
+    "back": "Volver",
+    "english": "Inglés",
+    "spanish": "Español",
+    "valencian": "Valenciano"
+  },
+  "errors": {
+    "NOT_AUTHORIZED": "No estás autorizado para hacer esta acción",
+    "MISSING_DATA": "Faltan datos necesarios",
+    "INVALID_EMAIL": "Formato de correo no válido",
+    "USERNAME_SPACES": "El nombre de usuario no puede contener espacios",
+    "EMAIL_REGISTERED": "Este correo ya está registrado",
+    "USERNAME_USED": "Este nombre de usuario ya está siendo usado",
+    "INVALID_CREDENTIALS": "Credenciales no válidas",
+    "NOT_FOUND": "Lo que estás buscando no se encuentra",
+    "ALREADY_FRIENDS": "Ya sois amigos",
+    "PENDING_REQUEST": "Esta petición ya existe",
+    "REQUEST_NOT_PENDING": "Esta petición ya se ha aceptado/rechazado",
+    "CANT_DO_ACTION": "No puedes hacer esa acción",
+    "ALREADY_IN_GROUP": "El usuario ya está en el grupo",
+    "NOT_MEMBER": "El usuario no es miembro de este grupo",
+    "ALREADY_SHARED": "Ya se está compartiendo",
+    "NOT_SHARED": "No está compartido"
+  }
+}

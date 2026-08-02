@@ -5,6 +5,7 @@ import ModalWrapper from "./ModalWrapper";
 import SharePinModal from "./SharePinModal";
 import { useAuth } from "../context/AuthContext";
 import { formatDate } from "../utils/formatDate";
+import { useTranslation } from "react-i18next";
 
 interface PinDetailModalProps {
   pin: {
@@ -28,6 +29,8 @@ export default function PinDetailModal({
   onUpdate,
 }: PinDetailModalProps) {
   if (!pin) return null;
+
+  const { t } = useTranslation();
 
   const { user } = useAuth();
   const isOwner = user?.id === pin.ownerId;
@@ -71,7 +74,7 @@ export default function PinDetailModal({
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Pin Details</h2>
+        <h2 className="text-white text-xl font-bold">{t("pinDetail.title")}</h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -100,19 +103,21 @@ export default function PinDetailModal({
               onClick={() => setShowShareModal(true)}
               className="flex-1 py-2 rounded-xl font-medium transition-all cursor-pointer bg-purple-600 text-white"
             >
-              Share
+              {t("pinDetail.shareButton")}
             </button>
           )}
         </div>
         <div>
-          <span className="text-gray-500 text-sm">Created by</span>
+          <span className="text-gray-500 text-sm">
+            {t("pinDetail.createdBy")}
+          </span>
           <p className="text-white font-medium">
-            {pin.owner?.realName || "Unknown"}
+            {pin.owner?.realName || t("pinDetail.unknown")}
           </p>
         </div>
         <div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-500 text-sm">Note</span>
+            <span className="text-gray-500 text-sm">{t("pinDetail.note")}</span>
             {!editing && isOwner && (
               <button
                 onClick={() => {
@@ -147,7 +152,7 @@ export default function PinDetailModal({
                 rows={3}
                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 text-sm border border-gray-600 focus:border-
           purple-500 focus:ring-1 focus:ring-purple-500 outline-none resize-none"
-                placeholder="Add a note..."
+                placeholder={t("pinDetail.addNote")}
                 autoFocus
               />
               <div className="flex gap-2 justify-end">
@@ -157,7 +162,7 @@ export default function PinDetailModal({
                   className="x-3 py-1.5 text-xs font-medium text-gray-400 bg-gray-700 rounded-lg hover:bg-gray-600
             transition-colors disabled:opacity-50 cursor-pointer"
                 >
-                  Cancel
+                  {t("pinDetail.cancelEditNote")}
                 </button>
                 <button
                   onClick={handleSaveNote}
@@ -165,20 +170,26 @@ export default function PinDetailModal({
                   className="px-3 py-1.5 text-xs font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-500
             transition-colors disabled:opacity-50 cursor-pointer"
                 >
-                  {saving ? "Saving..." : "Save"}
+                  {saving
+                    ? t("pinDetail.savingEditNote")
+                    : t("pinDetail.saveEditNote")}
                 </button>
               </div>
             </div>
           ) : (
             <p className="text-white mt-1">
               {currentNote || (
-                <span className="text-gray-500 italic">No notes</span>
+                <span className="text-gray-500 italic">
+                  {t("pinDetail.noNotes")}
+                </span>
               )}
             </p>
           )}
         </div>
         <div>
-          <span className="text-gray-500 text-sm">Created at</span>
+          <span className="text-gray-500 text-sm">
+            {t("pinDetail.createdAt")}
+          </span>
           <p className="text-white">{formatDate(pin.createdAt)}</p>
         </div>
         {onDelete && (
@@ -189,7 +200,7 @@ export default function PinDetailModal({
             }}
             className="w-full mt-4 py-2 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-500 active:scale-[0.98] transition-all duration-200 cursor-pointer"
           >
-            Delete pin
+            {t("pinDetail.deletePin")}
           </button>
         )}
       </div>

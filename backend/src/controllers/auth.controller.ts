@@ -9,32 +9,32 @@ export async function register(req: Request, res: Response) {
   let { email, password, username, realName } = req.body ?? {};
 
   if (!email || !password || !username || !realName) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.status(400).json({ code: "MISSING_DATA" });
   }
 
   email = email.toLowerCase();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (emailRegex.test(email)) {
-    return res.status(400).json({ error: "Invalid email format" });
+    return res.status(400).json({ code: "INVALID_EMAIL" });
   }
 
   username = username.toLowerCase();
 
   if (username.includes(" ")) {
-    return res.status(400).json({ error: "Username cannot contain spaces" });
+    return res.status(400).json({ code: "USERNAME_SPACES" });
   }
 
   const existingEmail = await prisma.user.findUnique({ where: { email } });
   if (existingEmail) {
-    return res.status(409).json({ error: "The email is already registered" });
+    return res.status(409).json({ code: "EMAIL_REGISTERED" });
   }
 
   const existingUsername = await prisma.user.findUnique({
     where: { username },
   });
   if (existingUsername) {
-    return res.status(409).json({ error: "The username is already used" });
+    return res.status(409).json({ code: "USERNAME_USED" });
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -55,7 +55,7 @@ export async function login(req: Request, res: Response) {
   let { identifier, password } = req.body ?? {};
 
   if (!identifier || !password) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.status(400).json({ code: "MISSING_DATA" });
   }
 
   identifier = identifier.toLowerCase();
@@ -66,12 +66,12 @@ export async function login(req: Request, res: Response) {
     },
   });
   if (!user) {
-    return res.status(401).json({ error: "Invalid credentials" });
+    return res.status(401).json({ code: "INVALID_CREDENTIALS" });
   }
 
   const passwordMatches = await bcrypt.compare(password, user.passwordHash);
   if (!passwordMatches) {
-    return res.status(401).json({ error: "Invalid credentials" });
+    return res.status(401).json({ code: "INVALID_CREDENTIALS" });
   }
 
   const jwtSecret = process.env.JWT_SECRET;
@@ -101,7 +101,7 @@ export async function me(req: AuthRequest, res: Response) {
   });
 
   if (!user) {
-    return res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   res.json(user);

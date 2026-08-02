@@ -10,8 +10,11 @@ import {
 import CreateGroupModal from "../components/CreateGroupModal";
 import ModalWrapper from "../components/ModalWrapper";
 import GroupDetailModal from "../components/GroupDetailModal";
+import { useTranslation } from "react-i18next";
 
 export default function GroupsPage() {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [groups, setGroups] = useState<any[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -62,18 +65,18 @@ export default function GroupsPage() {
   return (
     <div className="p-4 h-full flex flex-col text-white">
       <h1 className="text-white text-2xl font-bold mb-4 text-center mt-4">
-        Groups
+        {t("groups.title")}
       </h1>
       <button
         onClick={() => setShowCreateModal(true)}
         className="w-full py-3 rounded-xl bg-purple-600 font-semibold hover:bg-purple-500 transition-all cursor-pointer"
       >
-        Create group
+        {t("groups.createGroup")}
       </button>
       <div className="flex-1 overflow-y-auto mt-4 space-y-2">
         {groups.length === 0 ? (
           <p className="text-gray-500 text-center mt-10">
-            You aren't in any groups yet
+            {t("groups.noGroups")}
           </p>
         ) : (
           groups.map((group) => (
@@ -87,7 +90,7 @@ export default function GroupsPage() {
             >
               <p className="text-white font-medium">{group.name}</p>
               <p className="text-gray-400 text-sm">
-                {group.members.length} members
+                {group.members.length} {t("groups.members")}
               </p>
             </div>
           ))

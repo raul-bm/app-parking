@@ -12,6 +12,7 @@ import { api } from "../api/client";
 import PinDetailModal from "../components/PinDetailModal";
 import { useAuth } from "../context/AuthContext";
 import ModalWrapper from "../components/ModalWrapper";
+import { useTranslation } from "react-i18next";
 
 const DefaultIcon = L.icon({
   iconRetinaUrl:
@@ -47,6 +48,8 @@ function MapClickHandler({
 }
 
 export default function MapPage() {
+  const { t } = useTranslation();
+
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null,
   );
@@ -161,7 +164,7 @@ export default function MapPage() {
             </MapContainer>
           ) : (
             <div className="h-full w-full flex items-center justify-center text-gray-400">
-              Getting your location...
+              {t("mapPage.mapGettingLocation")}
             </div>
           )}
         </div>
@@ -171,7 +174,7 @@ export default function MapPage() {
         <div className="px-4 pb-2">
           <input
             type="text"
-            placeholder="Add a note (e.g. parking spot number)"
+            placeholder={t("mapPage.notePlaceholder")}
             value={note}
             onChange={(e) => setNote(e.target.value)}
             className="w-full p-3 rounded-xl bg-gray-800 text-white border border-gray-700 placeholder-gray-500 outline-none focus:ring-2 focus:ring-purple-500"
@@ -186,7 +189,7 @@ export default function MapPage() {
               shadow-lg hover:from-emerald-500 hover:to-teal-500 active:scale-[0.98] transition-all duration-200 cursor-
               pointer"
             >
-              Park at selected point
+              {t("mapPage.parkSelectedPoint")}
             </button>
           )}
           <button
@@ -198,7 +201,7 @@ export default function MapPage() {
             lg shadow-lg disabled:opacity-40 disabled:cursor-not-allowed hover:from-purple-500 hover:to-indigo-500
             active:scale-[0.98] transition-all duration-200 cursor-pointer"
           >
-            Park in your location
+            {t("mapPage.parkOnLocation")}
           </button>
         </div>
       </div>

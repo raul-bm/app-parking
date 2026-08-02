@@ -10,7 +10,7 @@ export async function createGroup(req: AuthRequest, res: Response) {
   const { name } = req.body ?? {};
 
   if (name === undefined) {
-    return res.status(400).json({ error: "Missing required data (name)" });
+    return res.status(400).json({ code: "MISSING_DATA" });
   }
 
   const group = await prisma.group.create({
@@ -67,14 +67,14 @@ export async function getSpecificGroup(req: AuthRequest, res: Response) {
   });
 
   if (!group) {
-    return res.status(404).json({ error: "Group not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   const isOwner = group.ownerId === req.userId;
   const isMember = group.members.some((member) => member.userId === req.userId);
 
   if (!isOwner && !isMember) {
-    return res.status(403).json({ error: "Not authorized to view this group" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   res.json(group);
@@ -91,13 +91,11 @@ export async function deleteGroup(req: AuthRequest, res: Response) {
   });
 
   if (!group) {
-    return res.status(404).json({ error: "Group not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (group.ownerId !== req.userId) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to delete the group" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const membersIds = group.members.map((m) => m.userId);
@@ -121,9 +119,7 @@ export async function addGroupMember(req: AuthRequest, res: Response) {
   const { userId } = req.body ?? {};
 
   if (userId === undefined) {
-    return res
-      .status(400)
-      .json({ error: "Missing required data (userId of the new member)" });
+    return res.status(400).json({ code: "MISSING_DATA" });
   }
 
   const group = await prisma.group.findUnique({
@@ -138,17 +134,15 @@ export async function addGroupMember(req: AuthRequest, res: Response) {
   });
 
   if (!group) {
-    return res.status(404).json({ error: "Group not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (group.ownerId !== req.userId) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to add members to the group" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   if (req.userId === userId) {
-    return res.status(400).json({ error: "Can't add self to the group" });
+    return res.status(400).json({ code: "CANT_DO_ACTION" });
   }
 
   const userToAdd = await prisma.user.findUnique({
@@ -156,7 +150,7 @@ export async function addGroupMember(req: AuthRequest, res: Response) {
   });
 
   if (!userToAdd) {
-    return res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   const memberAlreadyExists = group.members.some(
@@ -164,7 +158,7 @@ export async function addGroupMember(req: AuthRequest, res: Response) {
   );
 
   if (memberAlreadyExists) {
-    return res.status(400).json({ error: "User already in group" });
+    return res.status(400).json({ code: "ALREADY_IN_GROUP" });
   }
 
   const newMember = await prisma.groupMember.create({
@@ -192,7 +186,7 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
   });
 
   if (!group) {
-    return res.status(404).json({ error: "Group not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   const userSelfIsMember = group.members.some(
@@ -200,9 +194,7 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
   );
 
   if (!userSelfIsMember) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to do anything on this group" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const userToRemoveisMember = group.members.some(
@@ -210,9 +202,7 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
   );
 
   if (!userToRemoveisMember) {
-    return res
-      .status(404)
-      .json({ error: "User is not a member of this group" });
+    return res.status(404).json({ code: "NOT_MEMBER" });
   }
 
   if (userIdToRemove === req.userId && group.ownerId !== req.userId) {
@@ -233,15 +223,12 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
   }
 
   if (group.ownerId !== req.userId) {
-    return res
-      .status(403)
-      .json({ error: "Only the owner can remove other members" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   if (userIdToRemove === group.ownerId) {
     return res.status(400).json({
-      error:
-        "Cannot remove the group owner (the owner should delete the group)",
+      code: "CANT_DO_ACTION",
     });
   }
 

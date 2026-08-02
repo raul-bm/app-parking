@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../api/client";
+import { useTranslation } from "react-i18next";
 
 interface SentRequestsModalProps {
   requests: Array<{
@@ -19,6 +20,8 @@ export default function SentRequestsModal({
   onClose,
   onUpdated,
 }: SentRequestsModalProps) {
+  const { t } = useTranslation();
+
   const [cancellingId, setCancellingId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [errorId, setErrorId] = useState<number | null>(null);
@@ -45,7 +48,9 @@ export default function SentRequestsModal({
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Sent Requests</h2>
+        <h2 className="text-white text-xl font-bold">
+          {t("sentRequests.title")}
+        </h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -54,7 +59,9 @@ export default function SentRequestsModal({
         </button>
       </div>
       {requests.length === 0 ? (
-        <p className="text-gray-400 text-center mt-10">No sent requests</p>
+        <p className="text-gray-400 text-center mt-10">
+          {t("sentRequests.noRequests")}
+        </p>
       ) : (
         <div className="space-y-3">
           {requests.map((request) => (
@@ -71,7 +78,7 @@ export default function SentRequestsModal({
                   className="py-1 px-2 rounded-xl bg-red-700 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                   disabled={request.id === cancellingId}
                 >
-                  Cancel
+                  {t("sentRequests.cancel")}
                 </button>
               </div>
               {error && errorId === request.id && (

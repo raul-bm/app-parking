@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 import "leaflet/dist/leaflet.css";
+import "./i18n";
 
 import "./index.css";
 

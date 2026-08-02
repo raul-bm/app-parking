@@ -10,9 +10,7 @@ export async function sendFriendRequest(req: AuthRequest, res: Response) {
   const targetUserId = Number(req.params.userId);
 
   if (targetUserId === req.userId) {
-    return res
-      .status(406)
-      .json({ error: "User can't send friend request to self" });
+    return res.status(406).json({ code: "CANT_DO_ACTION" });
   }
 
   const existingFriendship = await prisma.friendship.findFirst({
@@ -26,11 +24,9 @@ export async function sendFriendRequest(req: AuthRequest, res: Response) {
 
   if (existingFriendship !== null) {
     if (existingFriendship?.status === "ACCEPTED") {
-      return res.status(409).json({ error: "Already friends" });
+      return res.status(409).json({ code: "ALREADY_FRIENDS" });
     } else {
-      return res
-        .status(409)
-        .json({ error: "A pending request already exists" });
+      return res.status(409).json({ code: "PENDING_REQUEST" });
     }
   }
 
@@ -58,17 +54,15 @@ export async function acceptFriendRequest(req: AuthRequest, res: Response) {
   });
 
   if (!friendship) {
-    return res.status(404).json({ error: "Friend request not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (friendship.addresseeId !== req.userId) {
-    return res
-      .status(403)
-      .json({ error: "Only the recipient can accept the request" });
+    return res.status(403).json({ code: "CANT_DO_ACTION" });
   }
 
   if (friendship.status !== "PENDING") {
-    return res.status(400).json({ error: "This request is no longer pending" });
+    return res.status(400).json({ code: "REQUEST_NOT_PENDING" });
   }
 
   const updated = await prisma.friendship.update({
@@ -91,20 +85,18 @@ export async function rejectFriendRequest(req: AuthRequest, res: Response) {
   });
 
   if (!friendship) {
-    return res.status(404).json({ error: "Friend request not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (friendship.status !== "PENDING") {
-    return res.status(400).json({ error: "This request is no longer pending" });
+    return res.status(400).json({ code: "REQUEST_NOT_PENDING" });
   }
 
   if (
     friendship.addresseeId !== req.userId &&
     friendship.requesterId !== req.userId
   ) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to delete this friendship" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const otherUserId =
@@ -181,16 +173,14 @@ export async function removeFriend(req: AuthRequest, res: Response) {
   });
 
   if (!friendship) {
-    return res.status(404).json({ error: "Friendship not found" });
+    return res.status(404).json({ code: "NOT_FOUND" });
   }
 
   if (
     friendship.requesterId !== req.userId &&
     friendship.addresseeId !== req.userId
   ) {
-    return res
-      .status(403)
-      .json({ error: "Not authorized to remove this friendship" });
+    return res.status(403).json({ code: "NOT_AUTHORIZED" });
   }
 
   const otherUserId =

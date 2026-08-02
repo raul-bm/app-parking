@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "../api/client";
+import { useTranslation } from "react-i18next";
 
 interface CreateGroupModalProps {
   onClose: () => void;
@@ -10,6 +11,8 @@ export default function CreateGroupModal({
   onClose,
   onCreated,
 }: CreateGroupModalProps) {
+  const { t } = useTranslation();
+
   const [nameGroup, setNameGroup] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,7 +40,9 @@ export default function CreateGroupModal({
   return (
     <>
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-white text-xl font-bold">Create group</h2>
+        <h2 className="text-white text-xl font-bold">
+          {t("createGroup.title")}
+        </h2>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-white text-2xl leading-none cursor-pointer"
@@ -55,7 +60,7 @@ export default function CreateGroupModal({
         <input
           value={nameGroup}
           onChange={(e) => setNameGroup(e.target.value)}
-          placeholder="Group name"
+          placeholder={t("createGroup.inputPlaceholder")}
           className="flex-1 bg-gray-700 text-white rounded-lg px-3 py-2 border border-gray-600 focus:border-purple-500"
           disabled={loading}
         />
@@ -64,7 +69,7 @@ export default function CreateGroupModal({
           className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-500 transition-colors cursor-pointer"
           disabled={loading}
         >
-          Create
+          {t("createGroup.createButton")}
         </button>
       </form>
       {error && <p className="text-red-400 text-center mt-5">{error}</p>}

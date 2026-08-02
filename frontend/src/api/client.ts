@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function api(endpoint: string, options: RequestInit = {}) {
@@ -23,7 +25,9 @@ export async function api(endpoint: string, options: RequestInit = {}) {
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error(data.error || "Something went wrong");
+    const errorCode = data.code || "SOMETHING_WENT_WRONG";
+    const translated = i18n.t(`errors.${errorCode}`);
+    throw new Error(translated);
   }
 
   return data;

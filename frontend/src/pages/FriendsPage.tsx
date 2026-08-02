@@ -11,8 +11,11 @@ import {
   offFriendshipUpdated,
 } from "../services/socket";
 import ModalWrapper from "../components/ModalWrapper";
+import { useTranslation } from "react-i18next";
 
 export default function FriendsPage() {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [friends, setFriends] = useState<any[]>([]);
   const [sentRequests, setSentRequests] = useState<any[]>([]);
@@ -54,33 +57,36 @@ export default function FriendsPage() {
   return (
     <div className="p-4 h-full flex flex-col text-white">
       <h1 className="text-white text-2xl font-bold mb-4 text-center mt-4">
-        Friends
+        {t("friends.title")}
       </h1>
       <button
         onClick={() => setShowAddModal(true)}
         className="w-full py-3 rounded-xl bg-purple-600 font-semibold hover:bg-purple-500 transition-all cursor-pointer"
       >
-        Add friend
+        {t("friends.addFriend")}
       </button>
       <div className="flex gap-3 mt-3">
         <button
           onClick={() => setShowSentModal(true)}
           className="flex-1 py-2 rounded-xl bg-indigo-600 font-medium hover:bg-indigo-500 transition-all cursor-pointer"
         >
-          Sent {sentRequests.length > 0 ? `(${sentRequests.length})` : ""}
+          {t("friends.sent")}{" "}
+          {sentRequests.length > 0 ? `(${sentRequests.length})` : ""}
         </button>
         <button
           onClick={() => setShowReceivedModal(true)}
           className="flex-1 py-2 rounded-xl bg-indigo-600 font-medium hover:bg-indigo-500 transition-all cursor-pointer"
         >
-          Received{" "}
+          {t("friends.received")}{" "}
           {receivedRequests.length > 0 ? `(${receivedRequests.length})` : ""}
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto mt-4 space-y-2">
         {friends.length === 0 ? (
-          <p className="text-gray-500 text-center mt-10">No friends yet</p>
+          <p className="text-gray-500 text-center mt-10">
+            {t("friends.noFriends")}
+          </p>
         ) : (
           friends.map((friend) => (
             <div
@@ -101,7 +107,7 @@ export default function FriendsPage() {
                 className="py-1 px-2 rounded-xl bg-red-700 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                 title="Remove friend"
               >
-                Remove friend
+                {t("friends.removeFriend")}
               </button>
             </div>
           ))

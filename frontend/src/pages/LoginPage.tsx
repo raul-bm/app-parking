@@ -2,8 +2,12 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "../components/LanguageSelector";
 
 export default function LoginPage() {
+  const { t } = useTranslation();
+
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,22 +32,25 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-5">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-5 relative">
+      <div className="absolute top-4 right-4">
+        <LanguageSelector />
+      </div>
       <div className="w-full max-w-sm bg-gray-800 rounded-2xl p-8">
         <h1 className="text-white text-2xl font-bold mb-6 text-center">
-          Login
+          {t("login.title")}
         </h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Email or username"
+            placeholder={t("login.inputPlaceholder")}
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
             className="w-full p-3 rounded-xl bg-gray-700 text-white border border-gray-600 placeholder-gray-400 outline-none"
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t("login.passwordPlaceholder")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 rounded-xl bg-gray-700 text-white border border-gray-600 placeholder-gray-400 outline-none"
@@ -53,13 +60,13 @@ export default function LoginPage() {
             type="submit"
             className="w-full p-3 rounded-xl bg-purple-600 text-white font-semibold cursor-pointer"
           >
-            Login
+            {t("login.loginButton")}
           </button>
         </form>
         <p className="text-gray-400 text-sm text-center mt-4">
-          Don't have an account?{" "}
+          {t("login.dontHaveAccountMessage")}{" "}
           <Link to="/register" className="text-purple-400 underline">
-            Register
+            {t("login.register")}
           </Link>
         </p>
       </div>
