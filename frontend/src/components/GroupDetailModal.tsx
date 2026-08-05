@@ -146,7 +146,7 @@ export default function GroupDetailModal({
           ))}
         </div>
       </div>
-      {currentUserId === group.ownerId && (
+      {currentUserId === group.ownerId ? (
         <button
           onClick={async () => {
             try {
@@ -160,6 +160,23 @@ export default function GroupDetailModal({
           className="w-full mt-6 py-2 rounded-xl bg-red-700 text-white font-semibold hover:bg-red-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
         >
           {t("groupDetail.deleteGroup")}
+        </button>
+      ) : (
+        <button
+          onClick={async () => {
+            try {
+              await api(`/groups/${group.id}/members/${currentUserId}`, {
+                method: "DELETE",
+              });
+              onUpdated();
+              onClose();
+            } catch (err: any) {
+              console.error(err);
+            }
+          }}
+          className="w-full mt-6 py-2 rounded-xl bg-orange-700 text-white font-semibold hover:bg-orange-600 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+        >
+          {t("groupDetail.leaveGroup")}
         </button>
       )}
     </>

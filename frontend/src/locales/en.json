@@ -100,7 +100,8 @@
     "removeMember": "Remove member",
     "deleteGroup": "Delete group",
     "successAdd1": "Added the user",
-    "successAdd2": "successfully!"
+    "successAdd2": "successfully!",
+    "leaveGroup": "Leave group"
   },
   "sharedWithMe": {
     "title": "Shared with me",

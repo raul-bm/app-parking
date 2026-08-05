@@ -100,7 +100,8 @@
     "removeMember": "El·liminar membre",
     "deleteGroup": "Borrar grup",
     "successAdd1": "Afegit l'usuari",
-    "successAdd2": "correctament!"
+    "successAdd2": "correctament!",
+    "leaveGroup": "Sortir del grup"
   },
   "sharedWithMe": {
     "title": "Compartits amb mi",

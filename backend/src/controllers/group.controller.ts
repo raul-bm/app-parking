@@ -219,6 +219,8 @@ export async function removeGroupMember(req: AuthRequest, res: Response) {
       },
     });
 
+    notifyGroupMembers(groupId, "groups:updated", userIdToRemove);
+
     return res.status(204).send();
   }
 

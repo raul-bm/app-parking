@@ -100,7 +100,8 @@
     "removeMember": "Eliminar miembro",
     "deleteGroup": "Borrar grupo",
     "successAdd1": "Añadido al usuario",
-    "successAdd2": "correctamente!"
+    "successAdd2": "correctamente!",
+    "leaveGroup": "Salir del grupo"
   },
   "sharedWithMe": {
     "title": "Compartidos conmigo",
