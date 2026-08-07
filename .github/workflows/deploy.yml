@@ -29,9 +29,13 @@ jobs:
           DATABASE_URL=postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@postgres:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}
           PORT=${{ secrets.BACKEND_PORT }}
           JWT_SECRET=${{ secrets.JWT_SECRET }}
+          GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
           ENVEOF
 
-          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > deploy-env/frontend.env
+          cat > deploy-env/frontend.env << 'ENVEOF'
+          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          ENVEOF
 
       - name: Copy env files to server
         uses: appleboy/scp-action@v0.1.7
