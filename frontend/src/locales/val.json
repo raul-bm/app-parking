@@ -26,7 +26,10 @@
     "mapGettingLocation": "Obtenint la teua ubicació...",
     "notePlaceholder": "Afegeix una nota (p.e. lloc del parking)",
     "parkSelectedPoint": "Aparca en el lloc seleccionat",
-    "parkOnLocation": "Aparca en la teua ubicació"
+    "parkOnLocation": "Aparca en la teua ubicació",
+    "locationDenied1": "Permís d'ubicació denegat.",
+    "locationDenied2": "Activa'l en els ajustos del lloc (cadenat) o en Ajustos → Aplicacions → App Parking → Permisos → Ubicació",
+    "retryLocation": "Reintenta"
   },
   "history": {
     "noPins": "No hi han pins encara"

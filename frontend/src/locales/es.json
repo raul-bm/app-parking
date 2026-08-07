@@ -26,7 +26,10 @@
     "mapGettingLocation": "Accediendo a tu ubicación...",
     "notePlaceholder": "Añade una nota (p.e. número del parking)",
     "parkSelectedPoint": "Aparca en el lugar seleccionado",
-    "parkOnLocation": "Aparca en tu ubicación"
+    "parkOnLocation": "Aparca en tu ubicación",
+    "locationDenied1": "Permiso de ubicación denegado.",
+    "locationDenied2": "Actívalo en los ajustes del sitio (candado de la barra) o en Ajustes → Aplicaciones → App Parking → Permisos → Ubicación",
+    "retryLocation": "Reintentar"
   },
   "history": {
     "noPins": "No hay pines aún"

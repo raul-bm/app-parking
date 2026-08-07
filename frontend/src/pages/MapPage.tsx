@@ -53,6 +53,7 @@ export default function MapPage() {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null,
   );
+  const [locationError, setLocationError] = useState(false);
   const [pins, setPins] = useState<any[]>([]);
   const [clickedLocation, setClickedLocation] = useState<
     [number, number] | null
@@ -61,12 +62,29 @@ export default function MapPage() {
   const [selectedPin, setSelectedPin] = useState<any>(null);
   const { user } = useAuth();
 
-  useEffect(() => {
+  function requestLocation() {
     navigator.geolocation.getCurrentPosition(
-      (pos) => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
-      () => console.log("Location denied"),
+      (pos) => {
+        setUserLocation([pos.coords.latitude, pos.coords.longitude]);
+        setLocationError(false);
+      },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setLocationError(true);
+        }
+      },
       { enableHighAccuracy: true },
     );
+  }
+
+  useEffect(() => {
+    requestLocation();
+
+    navigator.permissions?.query({ name: "geolocation" }).then((status) => {
+      status.addEventListener("change", () => {
+        if (status.state === "granted") requestLocation();
+      });
+    });
 
     api("/pins").then(setPins).catch(console.log);
   }, []);
@@ -117,6 +135,18 @@ export default function MapPage() {
 
   return (
     <div className="h-full flex flex-col bg-gray-900">
+      {locationError && (
+        <div className="mx-4 mt-4 p-3 rounded-xl bg-yellow-900/50 border border-yellow-700 text-yellow-200 text-sm flex flex-col gap-2">
+          <p className="text-center">{t("mapPage.locationDenied1")}</p>
+          <p className="text-center">{t("mapPage.locationDenied2")}</p>
+          <button
+            onClick={requestLocation}
+            className="w-full py-2 rounded-lg bg-yellow-600 text-black font-semibold text-center cursor-pointer "
+          >
+            {t("mapPage.retryLocation")}
+          </button>
+        </div>
+      )}
       <div className="flex-1 p-4 flex items-center justify-center">
         <div
           ref={mapRef}

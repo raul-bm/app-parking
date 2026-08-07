@@ -26,7 +26,10 @@
     "mapGettingLocation": "Getting your location...",
     "notePlaceholder": "Add a note (e.g. parking spot number)",
     "parkSelectedPoint": "Park at selected point",
-    "parkOnLocation": "Park in your location"
+    "parkOnLocation": "Park in your location",
+    "locationDenied1": "Location permission denied.",
+    "locationDenied2": "Enable it in the site settings (lock icon) or in Settings → Apps → App Parking → Permissions → Location",
+    "retryLocation": "Retry"
   },
   "history": {
     "noPins": "No pins yet"
