@@ -124,6 +124,13 @@
     "spanish": "Spanish",
     "valencian": "Valencian"
   },
+  "google": {
+    "or": "or",
+    "registerTitle": "Complete your registration",
+    "registering": "Registering...",
+    "registerButton": "Register",
+    "fillAllFields": "Fill in all the fields"
+  },
   "errors": {
     "NOT_AUTHORIZED": "Not authorized to do this action",
     "MISSING_DATA": "Missing required data",

@@ -124,6 +124,13 @@
     "spanish": "Espanyol",
     "valencian": "Valencià"
   },
+  "google": {
+    "or": "o",
+    "registerTitle": "Completa el teu registre",
+    "registering": "Registrant...",
+    "registerButton": "Registra'm",
+    "fillAllFields": "Ompli tots els camps"
+  },
   "errors": {
     "NOT_AUTHORIZED": "No estás autoritzat per fer aquesta acció",
     "MISSING_DATA": "Falten dades necessaries",

@@ -3,6 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { api } from "../api/client";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "../components/LanguageSelector";
+import { useAuth } from "../context/AuthContext";
+import GoogleButton from "../components/GoogleButton";
+import GoogleRegisterModal from "../components/GoogleRegisterModal";
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -12,7 +15,34 @@ export default function RegisterPage() {
   const [realName, setRealName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
+
+  const [googleProfile, setGoogleProfile] = useState<{
+    preRegisterToken: string;
+    googleEmail: string;
+    googleName: string;
+  } | null>(null);
+
+  async function handleGoogleToken(idToken: string) {
+    setError("");
+
+    try {
+      const data = await api("/auth/google", {
+        method: "POST",
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (data.requiresProfile) {
+        setGoogleProfile(data);
+      } else {
+        login(data.token, data.user);
+        navigate("/map");
+      }
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
 
   async function handleSubmit(e: any) {
     e.preventDefault();
@@ -84,6 +114,27 @@ export default function RegisterPage() {
             {t("register.registerButton")}
           </button>
         </form>
+
+        <div className="flex items-center gap-3 my-4">
+          <div className="h-px bg-gray-600 flex-1" />
+          <span className="text-gray-400 text-sm">{t("google.or")}</span>
+          <div className="h-px bg-gray-600 flex-1" />
+        </div>
+        <GoogleButton onToken={handleGoogleToken} />
+
+        {googleProfile && (
+          <GoogleRegisterModal
+            preRegisterToken={googleProfile.preRegisterToken}
+            googleEmail={googleProfile.googleEmail}
+            googleName={googleProfile.googleName}
+            onClose={() => setGoogleProfile(null)}
+            onDone={(token, user) => {
+              login(token, user);
+              navigate("/map");
+            }}
+          />
+        )}
+
         <p className="text-gray-400 text-sm text-center mt-4">
           {t("register.alreadyHaveAccountMessage")}{" "}
           <Link to="/login" className="text-purple-400 underline">
