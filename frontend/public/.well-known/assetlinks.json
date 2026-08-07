@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.raulbm.appparking",
+      "sha256_cert_fingerprints": [
+        "3C:5C:92:19:40:B1:50:F2:F1:01:5C:16:B9:27:72:90:4C:7D:2D:B2:7D:B6:03:9C:BB:50:50:B2:69:3D:A8:8B"
+      ]
+    }
+  }
+]
