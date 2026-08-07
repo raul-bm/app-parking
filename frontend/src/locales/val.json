@@ -5,7 +5,9 @@
     "passwordPlaceholder": "Contrasenya",
     "loginButton": "Accedir",
     "dontHaveAccountMessage": "No tens encara un compte?",
-    "register": "Registra't"
+    "register": "Registra't",
+    "hidePassword": "Ocultar contrasenya",
+    "showPassword": "Mostrar contrasenya"
   },
   "register": {
     "title": "Registrar-se",
@@ -16,7 +18,9 @@
     "passwordPlaceholder": "Contrasenya",
     "registerButton": "Registrar-se",
     "alreadyHaveAccountMessage": "Ja tens un compte?",
-    "login": "Accedix"
+    "login": "Accedix",
+    "hidePassword": "Ocultar contrasenya",
+    "showPassword": "Mostrar contrasenya"
   },
   "mapPage": {
     "mapGettingLocation": "Obtenint la teua ubicació...",

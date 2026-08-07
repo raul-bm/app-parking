@@ -5,7 +5,9 @@
     "passwordPlaceholder": "Contraseña",
     "loginButton": "Acceder",
     "dontHaveAccountMessage": "¿No tienes una cuenta aún?",
-    "register": "Regístrate"
+    "register": "Regístrate",
+    "hidePassword": "Ocultar contraseña",
+    "showPassword": "Mostrar contraseña"
   },
   "register": {
     "title": "Registrarse",
@@ -16,7 +18,9 @@
     "passwordPlaceholder": "Contraseña",
     "registerButton": "Registrarse",
     "alreadyHaveAccountMessage": "¿Ya tienes una cuenta?",
-    "login": "Accede"
+    "login": "Accede",
+    "hidePassword": "Ocultar contraseña",
+    "showPassword": "Mostrar contraseña"
   },
   "mapPage": {
     "mapGettingLocation": "Accediendo a tu ubicación...",

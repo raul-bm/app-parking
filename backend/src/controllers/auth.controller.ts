@@ -15,7 +15,7 @@ export async function register(req: Request, res: Response) {
   email = email.toLowerCase();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (emailRegex.test(email)) {
+  if (!emailRegex.test(email)) {
     return res.status(400).json({ code: "INVALID_EMAIL" });
   }
 
